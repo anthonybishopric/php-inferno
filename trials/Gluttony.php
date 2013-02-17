@@ -2,6 +2,20 @@
 
 class Gluttony
 {
+	public function strings_are_not_objects()
+	{
+		$story = "Dante woke up and it was raining";
+		assert_that(isset($story))->is_equal_to(true);
+		assert_that(is_object($story))->is_equal_to(false);
+		assert_that(is_string($story))->is_equal_to(true);
+	}
+
+	public function strings_are_scalar()
+	{
+		$story = "the air smelled terrible and a giant three-headed dog was growling at him";
+		assert_that(is_scalar($story))->is_equal_to(true);
+	}
+
 	public function strings_can_be_quite_large()
 	{
 		$the_third_circle = "Cerberus eats the mud, making him a glutton too.";
