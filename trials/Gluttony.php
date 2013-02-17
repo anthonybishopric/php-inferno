@@ -103,8 +103,12 @@ class Gluttony
 		assert_that($matches[1])->is_equal_to('Florence');
 	}
 
+	/**
+	* @suppress_warnings
+	*/
 	public function preg_match_carries_the_same_danger_as_strpos()
 	{
+
 		$good_pattern = '/^I am Dante$/'; // a $ specifies that no more characters are in the string.
 		$bad_pattern = '/missing the last forward slash';
 
@@ -113,5 +117,27 @@ class Gluttony
 
 		assert_that(preg_match($good_pattern, 'anyone have an umbrella?'))->is_identical_to(0);
 		assert_that(preg_match($bad_pattern, 'anyone have an umbrella?'))->is_identical_to(false);
+	}
+
+	public function preg_match_will_only_return_a_single_match()
+	{
+		$pattern = '/a ([a-z]at)/';
+		$matches = [];
+
+		preg_match($pattern, 'he brought a cat, a rat and a bat', $matches);
+
+		// Virgil: preg_match pick the first matching pattern as its answer
+		assert_that($matches)->is_equal_to(['a cat', 'cat']);
+	}
+
+	public function preg_match_all_will_return_every_match()
+	{
+		$pattern = '/a ([a-z]at)/';
+		$matches = [];
+
+		preg_match_all($pattern, 'he brought a cat, a rat and a bat', $matches);
+
+		assert_that($matches[0])->is_equal_to(['a cat', 'a rat', 'a bat']);	
+		assert_that($matches[1])->is_equal_to(['cat', 'rat', 'bat']);
 	}
 }

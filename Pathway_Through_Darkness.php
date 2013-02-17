@@ -54,9 +54,30 @@ class Pathway_Through_Darkness
 					{
 						$instance = $rfl_class->newInstance();
 						$name = $method->name;
-						$instance->$name();
+						$this->call_with_aspects($method, function() use ($instance, $name) 
+						{ 
+							$instance->$name();
+						});
 					}
 				);
+	}
+
+	private function call_with_aspects(ReflectionMethod $method, $fn)
+	{
+		$comment = $method->getDocComment();
+		$matches = [];
+		preg_match_all('/@([a-zA-Z\_]+)/', $comment, $matches);
+		if (count($matches) > 1 && in_array('suppress_warnings', $matches[1]))
+		{
+			$old_level = error_reporting();
+			$new_level = $old_level & ~E_WARNING;
+			error_reporting($new_level);
+		}
+		$fn();
+		if (isset($old_level))
+		{
+			error_reporting($old_level);
+		}
 	}
 	
 	private function print_total()
