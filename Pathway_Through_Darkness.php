@@ -17,7 +17,10 @@ class Pathway_Through_Darkness
 			$rfl_class = new ReflectionClass($class);
 			foreach ($rfl_class->getMethods() as $method)
 			{
-				$circle->add_trial($this->build_trial($rfl_class, $method));
+				if ($method->isPublic())
+				{
+					$circle->add_trial($this->build_trial($rfl_class, $method));
+				}
 			}
 			$this->circles[] = $circle;
 		}
@@ -199,5 +202,6 @@ class Trial
 
 class _{
 	const _ = "FILL ME IN";
+	const __ = false;
 }
 	

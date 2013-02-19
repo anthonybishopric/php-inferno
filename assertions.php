@@ -32,7 +32,15 @@ class That
 	{
 		if ($this->th != $other)
 		{
-			throw new Exception("Expected $other but was " . $this->th);
+			throw new Exception(inferno_sprintf("Expected %s but was %s", $other, $this->th));
+		}
+	}
+	
+	public function is_identical_to($other)
+	{
+		if ($this->th !== $other)
+		{
+			throw new Exception(inferno_sprintf("Expected %s to be identical to %s, but it wasn't", $other, $this->th));
 		}
 	}
 	
@@ -40,7 +48,35 @@ class That
 	{
 		if (!is_a($this->th, $other))
 		{
-			throw new Exception(sprintf("Expected %s to be an instance of %s but was %s", $this->th, $other, get_class($this->th)));
+			throw new Exception(inferno_sprintf("Expected %s to be an instance of %s but was %s", $this->th, $other, get_class($this->th)));
 		}
 	}
+}
+
+function inferno_sprintf($message/*, $arg1, $arg2 */)
+{
+	$args = func_get_args();
+	$formatted_args = array();
+	array_shift($args);
+	foreach ($args as $argument)
+	{
+		if ($argument === null)
+		{
+			$formatted_args[] = '<null>';
+		}
+		else if ($argument === false)
+		{
+			$formatted_args[] = '<false>';
+		}
+		else if ($argument === true)
+		{
+			$formatted_args[] = '<true>';
+		}
+		else
+		{
+			$formatted_args[] = print_r($argument, true);
+		}
+	}
+	array_unshift($formatted_args, $message);
+	return call_user_func_array('sprintf', $formatted_args);
 }
