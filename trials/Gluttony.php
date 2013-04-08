@@ -22,7 +22,7 @@ class Gluttony
 		assert_that(strlen($the_third_circle))->is_equal_to(48);
 	}
 
-	public function strings_can_hold_many_things()
+	public function strings_can_contain_many_things()
 	{
 		$ciacco = "his name was Giacomo";
 

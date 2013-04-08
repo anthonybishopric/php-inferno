@@ -1,5 +1,8 @@
 <?php
 
+/**
+* Classes
+*/
 class Greed
 {
 }

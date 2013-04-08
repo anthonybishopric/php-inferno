@@ -1,5 +1,8 @@
 <?php
 
+/**
+* Regular expressions
+*/
 class Lust
 {
 	public function collect_your_belongings()
