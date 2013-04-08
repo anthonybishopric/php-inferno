@@ -1,5 +1,8 @@
 <?php
 
+/** 
+* Basics
+*/
 class Limbo
 {
 
@@ -40,22 +43,13 @@ class Limbo
 		assert_that($nothing == '')->is_equal_to(true);
 	}
 
+	/**
+	* @suppress_warnings
+	*/
 	public function sometimes_you_will_have_nothing_to_go_by()
 	{
 		assert_that($undeclared)->is_equal_to(false);
 	}
-
-	/*
-	THROUGH ME IS THE WAY INTO THE SUFFERING CITY;
-	  THROUGH ME THE WAY INTO GRIEF ETERNAL;
-	THROUGH ME THE WAY AMONG LOST HUMANITY;
-	JUSTICE MOVED MY MAKER CELESTIAL;
-	  I WAS CREATED BY THE DIVINE POWER,
-	BY THE SUPREME WISDOM, AND BY LOVE PRIMEVAL.
-	ONLY ETERNAL THINGS ARE OLDER
-	  THAN I; AND I WILL FOREVER ENDURE.
-	ABANDON EVERY HOPE, YOU WHO ENTER.
-	*/
 
 	// branching / looping	
 

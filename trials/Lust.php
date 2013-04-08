@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Regular expressions
+* Arrays
 */
 class Lust
 {
@@ -29,6 +29,9 @@ class Lust
 		assert_that($lovers[0])->is_identical_to('paolo');
 	}
 	
+	/**
+	* @suppress_warnings
+	*/
 	public function looks_can_be_deceiving()
 	{
 		$lovers = ['francesca', 'paolo'];

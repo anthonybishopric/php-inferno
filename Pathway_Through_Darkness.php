@@ -73,7 +73,7 @@ class Pathway_Through_Darkness
 		if (count($matches) > 1 && in_array('suppress_warnings', $matches[1]))
 		{
 			$old_level = error_reporting();
-			$new_level = $old_level & ~E_WARNING;
+			$new_level = $old_level & ~E_WARNING & ~E_NOTICE;
 			error_reporting($new_level);
 		}
 		$fn();

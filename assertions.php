@@ -19,14 +19,6 @@ class That
 	{
 		$this->th = $th;
 	}
-	
-	public function is_identical_to($other)
-	{
-		if ($this->th !== $other)
-		{
-			throw new Exception("Expected $other but was " . $this->th);
-		}
-	}
 
 	public function is_equal_to($other)
 	{

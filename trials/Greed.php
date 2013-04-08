@@ -1,7 +1,7 @@
 <?php
 
 /**
-* Classes
+* Classes, Interfaces, Traits and Namespaces
 */
 class Greed
 {

@@ -1,5 +1,8 @@
 <?php
 
+/**
+* Strings and Regex
+*/
 class Gluttony
 {
 	public function strings_are_not_objects()
