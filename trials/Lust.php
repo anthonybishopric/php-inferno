@@ -5,7 +5,7 @@
 */
 class Lust
 {
-	public function collect_your_belongings()
+	public function making_arrays()
 	{
 		$empty_array = []; // square brackets create an array
 		assert_that(count($empty_array))->is_identical_to(0);
