@@ -15,6 +15,7 @@ Abandon hope, all ye who enter here...
 
 <?php
 echo "\033[0m";
+error_reporting(E_ALL);
 
 require_once 'Pathway_Through_Darkness.php';
 

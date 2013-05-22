@@ -51,7 +51,6 @@ class Limbo
 		assert_that($undeclared)->is_equal_to(false);
 	}
 
-
 	/**
 	* Exercise I. Finding an apartment in San Francisco is kind of like Limbo. 
 	* 
