@@ -5,13 +5,19 @@
 */
 class Lust
 {
-	public function making_arrays()
+	public function the_old_way_of_making_arrays()
+	{
+		$empty_array = array();
+		assert_that(count($empty_array))->is_identical_to(0);
+	}
+	
+	public function the_new_way_of_making_arrays()
 	{
 		$empty_array = []; // square brackets create an array
 		assert_that(count($empty_array))->is_identical_to(0);
 	}
 	
-	public function collect_your_thoughts()
+	public function you_can_add_things_to_arrays()
 	{
 		$lovers = [];
 		$lovers[0] ='francesca';
@@ -20,7 +26,7 @@ class Lust
 		assert_that($lovers)->is_identical_to(['francesca', 'paolo']);
 	}
 	
-	public function collect_yourself()
+	public function array_literals_can_contain_values_at_init_time()
 	{
 		$lovers = ['francesca', 'paolo'];
 		
@@ -32,7 +38,7 @@ class Lust
 	/**
 	* @suppress_warnings
 	*/
-	public function looks_can_be_deceiving()
+	public function unsetting_a_key_deletes_the_value_in_place()
 	{
 		$lovers = ['francesca', 'paolo'];
 		
@@ -41,7 +47,20 @@ class Lust
 		assert_that($lovers[1])->is_identical_to('paolo');
 	}
 	
-	public function the_lovers_through_time()
+	/**
+	* @suppress_warnings
+	*/
+	public function shifting_a_key_moves_the_remaining_keys_over()
+	{
+		$lovers = ['francesca', 'paolo'];
+		
+		$lover = array_shift($lovers);
+		assert_that($lover)->is_identical_to('francesca');
+		assert_that($lovers[0])->is_identical_to('paolo');
+		assert_that($lovers[1])->is_identical_to(null);
+	}
+	
+	public function arrays_can_have_string_keys()
 	{
 		$lovers = [
 			'francesca' => 'guinivere',
@@ -52,8 +71,39 @@ class Lust
 		assert_that(array_keys($lovers))->is_identical_to(['francesca', 'paolo']);
 		assert_that(array_values($lovers))->is_identical_to(['guinivere', 'lancelot']);
 	}
+
+	public function arrays_can_become_associative_unintentionally()
+	{
+		// array_merge
+	}
 	
-	public function caught_in_a_great_whirlwind()
+	public function for_loops_can_iterate_over_arrays()
+	{
+		
+	}
+	
+	public function foreach_loops_save_a_variable()
+	{
+		
+	}
+	
+	public function array_walk_can_do_the_same_thing()
+	{
+		
+	}
+	
+	public function you_can_even_use_the_array_internal_pointer()
+	{
+		// this approach is generally dangerous though, so 
+		// consider the other approaches instead.
+	}
+	
+	public function you_can_implement_your_own_arrays()
+	{
+		
+	}
+	
+	public function exercise()
 	{
 		
 	}

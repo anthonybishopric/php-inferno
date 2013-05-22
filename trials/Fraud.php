@@ -1,8 +1,9 @@
 <?php
 
 /**
-* Magic Methods
+* PHP INI
 */
 class Fraud
 {
+	
 }
