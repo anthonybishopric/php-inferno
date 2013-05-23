@@ -1,5 +1,7 @@
 # The PHP Inferno
 
+![Hell](hell.jpg)
+
 ## A set of guided exercises through PHP Hell
 
 The PHP inferno is a cautionary tale about the features of PHP and how to use them safely. You will learn of the sins of the language and how to remain pious even in the darkest PHP codebases.
