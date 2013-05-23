@@ -25,7 +25,6 @@ class Lust
 
 		assert_that($lovers)->is_identical_to(['francesca', 'paolo']);
 	}
-
 	public function array_literals_can_contain_values_at_init_time()
 	{
 		$lovers = ['francesca', 'paolo'];
@@ -53,7 +52,6 @@ class Lust
 	public function shifting_a_key_moves_the_remaining_keys_over()
 	{
 		$lovers = ['francesca', 'paolo'];
-
 		$lover = array_shift($lovers);
 		assert_that($lover)->is_identical_to('francesca');
 		assert_that($lovers[0])->is_identical_to('paolo');
@@ -73,6 +71,7 @@ class Lust
 	}
 
 	public function array_merge_combines_two_arrays()
+
 	{
 		$lovers = ['francesca' => 'guinivere', 'paolo' => 'lancelot'];
 		$more_lovers = ['paolo' => 'romeo', 'romeo' => 'leonardo'];
