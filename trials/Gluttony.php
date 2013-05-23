@@ -157,4 +157,70 @@ class Gluttony
 		assert_that($matches[0])->is_equal_to(['a cat', 'a rat', 'a bat']);	
 		assert_that($matches[1])->is_equal_to(['cat', 'rat', 'bat']);
 	}
+	
+	/**
+	* Exercise III. What did you eat?
+	* Cerberus is a good doggie. Yes you are! Yes you are!
+	* What do you have in your mouths? Tell me exactly!
+	*/
+	private function whats_in_the_mouths_of_cerberus($mouth_contents)
+	{
+		$result = [];
+		// implement me!
+		// tip: use trim to remove whitespace
+		if ($mouth_contents === null || $mouth_contents === 'nothing')
+		{
+			$result = [];
+		}
+		else
+		{
+			$comma_exploded = explode(',' , $mouth_contents);
+			foreach ($comma_exploded as $comma)
+			{
+				$and_exploded = explode('and', $comma);
+				foreach($and_exploded as $word)
+				{
+					if (!in_array(trim($word), $result))
+					{
+						$result[] = trim($word);
+					}					
+				}
+			}			
+		}
+		
+		return $result;
+	}
+	
+	public function when_cerberus_is_just_eating_mud()
+	{
+		assert_that($this->whats_in_the_mouths_of_cerberus('mud'))
+			->is_equal_to(['mud']);
+	}
+	
+	public function when_cerberus_is_eating_mud_and_some_bones()
+	{
+		assert_that($this->whats_in_the_mouths_of_cerberus('mud, bones'))
+			->is_equal_to(['mud', 'bones']);
+	}
+	
+	public function why_do_you_have_a_honey_cake_boy()
+	{
+		assert_that($this->whats_in_the_mouths_of_cerberus('mud, bones and honey cake'))
+			->is_equal_to(['mud', 'bones', 'honey cake']);
+		
+		assert_that($this->whats_in_the_mouths_of_cerberus('mud and honey cake, bones and honey cake'))
+			->is_equal_to(['mud', 'honey cake', 'bones']);
+	}
+	
+	public function oh_hes_asleep_now()
+	{
+		assert_that($this->whats_in_the_mouths_of_cerberus('nothing'))
+			->is_equal_to([]);
+	}
+	
+	public function really_really_really_asleep()
+	{
+		assert_that($this->whats_in_the_mouths_of_cerberus(null))
+			->is_equal_to([]);
+	}
 }
