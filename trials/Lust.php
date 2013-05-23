@@ -70,6 +70,75 @@ class Lust
 		assert_that(array_values($lovers))->is_identical_to(['guinivere', 'lancelot']);
 	}
 
+	public function array_keys_are_ordered()
+	{
+		// PHP's arrays are implemented as ordered dicts.
+		$lovers = [
+			'francesca' => 'guinivere',
+			'paolo' => 'lancelot'
+		];
+
+		$lovers_again = [
+			'paolo' => 'lancelot',
+			'francesca' => 'guinivere',
+		];
+
+		assert_that($lovers == $lovers_again)->is_equal_to(true);
+		assert_that($lovers === $lovers_again)->is_equal_to(false);
+	}
+
+	public function array_key_exists_to_test_for_a_value_in_an_array()
+	{
+		$lovers = [
+			'francesca' => 'guinivere',
+			'paolo' => 'lancelot',
+			'forever_alone' => null
+		];
+
+		assert_that(array_key_exists('francesca', $lovers))->is_equal_to(true);
+		assert_that(array_key_exists('forever_alone', $lovers))->is_equal_to(true);
+		assert_that(array_key_exists('romeo', $lovers))->is_equal_to(false);
+	}
+
+	public function another_way_to_test_if_a_value_is_set()
+	{
+		$lovers = [
+			'francesca' => 'guinivere',
+			'paolo' => 'lancelot',
+			'forever_alone' => null
+		];
+
+		assert_that(isset($lovers['francesca']))->is_equal_to(true);
+		assert_that(isset($lovers['forever_alone']))->is_equal_to(false);
+		assert_that(isset($lovers['romeo']))->is_equal_to(false);
+	}
+
+	public function yet_another_way_to_test_a_value()
+	{
+		$lovers = [
+			'francesca' => 'guinivere',
+			'paolo' => 'lancelot',
+			'forever_alone' => null,
+		];
+
+		assert_that(empty($lovers['francesca']))->is_equal_to(false);
+		assert_that(empty($lovers['forever_alone']))->is_equal_to(true);
+		assert_that(empty($lovers['romeo']))->is_equal_to(true);
+	}
+
+	/*
+	Virgil says: You shouldn't test arrays without using a function. The statement
+	
+	if ($my_array[$key])
+	{
+		....
+	}
+	
+	works but it's ambiguous what it means. If you use this on an array where the
+	key is missing, PHP will emit a warning.
+	
+	*/
+
 	public function array_merge_combines_two_arrays()
 
 	{
@@ -97,6 +166,8 @@ class Lust
 
 		assert_that($all_user_ids)->is_equal_to(['francesca', 'paolo', 'lancelot', 'guinivere']);
 	}
+
+
 
 	public function for_loops_can_iterate_over_arrays()
 	{

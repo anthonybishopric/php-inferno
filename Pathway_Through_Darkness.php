@@ -7,7 +7,7 @@ class Pathway_Through_Darkness
 	
 	private $circles = array();
 	
-	public function __construct($classes)
+	public function __construct(array $classes)
 	{
 		foreach ($classes as $class)
 		{
@@ -39,8 +39,7 @@ class Pathway_Through_Darkness
 				catch (Exception $e)
 				{
 					$this->print_total();
-					$failed_test_with_message = $trial->name . ":\n" . $e->getMessage();
-					echo "\033[36m" . $failed_test_with_message . "\033[0m\n";
+					$this->print_message($trial, $e);
 					return;
 				}
 			}
@@ -49,7 +48,7 @@ class Pathway_Through_Darkness
 		echo "Some quote here\n";
 	}
 	
-	private function build_trial($rfl_class, $method)
+	private function build_trial(ReflectionClass $rfl_class, ReflectionMethod $method)
 	{
 		return new Trial(
 					sprintf("In the circle of %s, %s", $rfl_class->name, $method->name),
@@ -65,7 +64,7 @@ class Pathway_Through_Darkness
 				);
 	}
 
-	private function call_with_aspects(ReflectionMethod $method, $fn)
+	private function call_with_aspects(ReflectionMethod $method, callable $fn)
 	{
 		$comment = $method->getDocComment();
 		$matches = [];
@@ -94,6 +93,15 @@ class Pathway_Through_Darkness
 			echo $circle->completion_string() . "\n";
 		}
 		echo "\n\033[33m$completed / $total trials conquered\033[0m\n";
+	}
+	
+	private function print_message(Trial $trial, Exception $e)
+	{
+		$frame = $e->getTrace()[0];
+		$file = $frame['file'];
+		$line_number = $frame['line'];
+		$failed_test_with_message = $trial->name . ":\n" . $file. ":" .$line_number . "\n" . $e->getMessage();
+		echo "\033[36m" . $failed_test_with_message . "\033[0m\n";
 	}
 }
 
@@ -150,7 +158,7 @@ class Circle implements Countable
 
 class Trial
 {
-	public function __construct($name, $fn)
+	public function __construct($name, callable $fn)
 	{
 		$this->name = $name;
 		$this->fn = $fn;

@@ -74,43 +74,49 @@ class Treachery
 
 	public function no_distinction_between_maps_and_arrays()
 	{
-	
-	}
-	
-	public function arbitrary_expressions_in_switch_statements()
-	{
-	
-	}
-	
-	public function you_can_use_braces_to_do_array_indexing()
-	{
-		
-	}
-	
-	public function strings_of_global_function_names_are_callable()
-	{
-	
-	}
-	
-	public function scalar_type_hints_are_missing()
-	{
-	
-	}
-	
-	public function floats_and_doubles_are_the_same_thing()
-	{
-	
-	}
-	
-	public function constructs_that_look_like_functions()
-	{
-	
-	}
-	
-	public function array_concatenation_variability()
-	{
-	
+
 	}
 
-	
+	public function arbitrary_expressions_in_switch_statements()
+	{
+
+	}
+
+	public function you_can_use_braces_to_do_array_indexing()
+	{
+
+	}
+
+	public function strings_of_global_function_names_are_callable()
+	{
+
+	}
+
+	public function scalar_type_hints_are_missing()
+	{
+
+	}
+
+	public function floats_and_doubles_are_the_same_thing()
+	{
+
+	}
+
+	public function constructs_that_look_like_functions()
+	{
+
+	}
+
+	public function array_concatenation_variability()
+	{
+
+	}
+
+	/**
+	* @suppress_warnings
+	*/
+	public function isset_returns_false_for_string_offsets_on_strings()
+	{
+
+	}
 }
