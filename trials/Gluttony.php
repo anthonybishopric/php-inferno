@@ -191,6 +191,8 @@ class Gluttony
 		return $result;
 	}
 	
+	// make these pass:
+	
 	public function when_cerberus_is_just_eating_mud()
 	{
 		assert_that($this->whats_in_the_mouths_of_cerberus('mud'))

@@ -11,6 +11,11 @@ class Treachery
 	{
 
 	}
+	
+	public function the_static_keyword_basically_doesnt_matter()
+	{
+	
+	}
 
 	public function null_is_equal_to_zero_and_less_than_negative_one()
 	{

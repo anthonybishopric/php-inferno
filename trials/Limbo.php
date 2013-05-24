@@ -100,5 +100,4 @@ class Limbo
 		// hint: Are you using == or === ?
 		assert_that($this->get_apartment_prices(0, 2))->is_identical_to(null);
 	}
-
 }
