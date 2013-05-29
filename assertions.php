@@ -4,7 +4,7 @@ function assert_true($t)
 {
 	if ($t !== true)
 	{
-		throw new Exception("$t was not true");
+		throw new AssertException("$t was not true");
 	}
 }
 
@@ -24,7 +24,7 @@ class That
 	{
 		if ($this->th != $other)
 		{
-			throw new Exception(inferno_sprintf("Expected %s but was %s", $other, $this->th));
+			throw new AssertException(inferno_sprintf("Expected %s but was %s", $other, $this->th));
 		}
 	}
 	
@@ -32,7 +32,7 @@ class That
 	{
 		if ($this->th !== $other)
 		{
-			throw new Exception(inferno_sprintf("Expected %s to be identical to %s, but it wasn't", $other, $this->th));
+			throw new AssertException(inferno_sprintf("Expected %s to be identical to %s, but it wasn't", $other, $this->th));
 		}
 	}
 	
@@ -40,9 +40,14 @@ class That
 	{
 		if (!is_a($this->th, $other))
 		{
-			throw new Exception(inferno_sprintf("Expected %s to be an instance of %s but was %s", $this->th, $other, get_class($this->th)));
+			throw new AssertException(inferno_sprintf("Expected %s to be an instance of %s but was %s", $this->th, $other, get_class($this->th)));
 		}
 	}
+}
+
+class AssertException extends Exception
+{
+	
 }
 
 function inferno_sprintf($message/*, $arg1, $arg2 */)
