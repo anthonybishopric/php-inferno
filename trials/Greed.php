@@ -302,7 +302,8 @@ class Greed
 	*   add a left child edge.
 	*  * A 1{Name,Type} means add a node with the name "Name" and type "Type"
 	*   and pop up to the next node. For example, if you were on a leaf node, you
-	*   would set the value of the left child and then point at the right node.
+	*   would set the value of the left child and then point at the right node. If
+	*   you had set the right node, you pop up to the parent and perform on its right node.
 	*  * You can specify {empty} to indicate an empty position in the tree
 	*  * If the string ends before the tree is fully flushed out, then the
 	*   the remaining spots are considered empty.

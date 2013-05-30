@@ -6,7 +6,6 @@ class SalesHierarchy
 	{
 		// implement me!
 		$root = null;
-		$current = null;
 		$in_sales_definition = false;
 
 		$in_context_of = [];
@@ -87,23 +86,22 @@ class SalesHierarchy
 		}
 		return new SalesHierarchy($root);
 	}
-	
+
 	private $root;
-	
+
 	public function __construct(Salesperson $root)
 	{
 		$this->root = $root;
 	}
-	
+
 	public function assign_to_best_rep(Lead $lead)
 	{
 		$rep = $this->root->get_best_sales_rep($lead);
 		$rep->set_current_lead($lead);
 	}
-	
+
 	public function total_risk()
 	{
-		echo $this->root;
 		return $this->root->total_risk_incurred();
 	}
 }
@@ -150,7 +148,7 @@ abstract class Salesperson
 	{
 		$this->right = $person;
 	}
-	
+
 	public function set_left(Salesperson $person)
 	{
 		$this->left = $person;
@@ -165,7 +163,7 @@ abstract class Salesperson
 	{
 		$this->current_lead = $lead;
 	}
-	
+
 	/**
 	* @return double a value between 0 and 1 that represents the
 	* rate of success this salesperson has with deals.
@@ -201,7 +199,7 @@ abstract class Salesperson
 
 		return $winner_so_far;
 	}
-	
+
 	public function total_risk_incurred()
 	{
 		$total = 0;
@@ -228,12 +226,12 @@ abstract class Salesperson
 	{
 		return $lead->value() * (1 - $this->success_rate());
 	}
-	
+
 	public function __toString()
 	{
 		return $this->stringer(0);
 	}
-	
+
 	private function stringer($indent_level)
 	{
 		$name = str_repeat('-', $indent_level) . get_class($this) . " (has lead? " .( $this->current_lead ? $this->current_lead->value() : 'no'). ") \n";
