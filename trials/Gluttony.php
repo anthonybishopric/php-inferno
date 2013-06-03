@@ -15,8 +15,14 @@ class Gluttony
 
 	public function strings_are_scalar()
 	{
-		$story = "the air smelled terrible and a giant three-headed dog was growling at him";
+		$story = "the air smelled terrible";
 		assert_that(is_scalar($story))->is_equal_to(true);
+	}
+	
+	public function string_can_be_concatenated_with_the_dot_operator()
+	{
+		$string = "A " . "giant" . " three-headed " . "dog was growling " . "at him";
+		assert_that($string)->is_equal_to("A giant three-headed dog was growling at him");
 	}
 
 	public function strings_can_be_quite_large()
@@ -31,7 +37,6 @@ class Gluttony
 
 		assert_that(strpos($ciacco, ' '))->is_equal_to(3);
 		assert_that(strpos($ciacco, 'Giacomo'))->is_equal_to(13);
-		
 	}
 
 	public function sometimes_they_are_hard_to_find()

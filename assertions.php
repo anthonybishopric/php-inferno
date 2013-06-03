@@ -4,7 +4,7 @@ function assert_true($t)
 {
 	if ($t !== true)
 	{
-		throw new AssertException("$t was not true");
+		throw new AssertException(inferno_sprintf("%s was not true", $t));
 	}
 }
 
@@ -22,7 +22,7 @@ class That
 
 	public function is_equal_to($other)
 	{
-		if ($this->th != $other)
+		if ($this->th != $other || $other === __)
 		{
 			throw new AssertException(inferno_sprintf("Expected %s but was %s", $other, $this->th));
 		}
@@ -43,6 +43,7 @@ class That
 			throw new AssertException(inferno_sprintf("Expected %s to be an instance of %s but was %s", $this->th, $other, get_class($this->th)));
 		}
 	}
+	
 }
 
 class AssertException extends Exception

@@ -208,8 +208,4 @@ class Trial
 	}
 }
 
-class _{
-	const _ = "FILL ME IN";
-	const __ = false;
-}
-	
+define('__', 'FILL ME IN');

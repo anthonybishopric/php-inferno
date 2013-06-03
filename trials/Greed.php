@@ -275,7 +275,7 @@ class Greed
 	}
 
 	/**
-	* Exercise III. The Corporate Ladder
+	* Exercise IV. The Corporate Ladder
 	*
 	* The Sales floor of Rhombus.biz is organized into a strict hierarchy
 	* of killer salesmanship. At the top of the food chain are the Sociopaths -
