@@ -1,5 +1,10 @@
 <?php
 
+function fail($message)
+{
+	throw new AssertException($message);
+}
+
 function assert_true($t)
 {
 	if ($t !== true)

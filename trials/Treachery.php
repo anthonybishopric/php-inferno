@@ -4,6 +4,14 @@ require_once __DIR__ . '/classes/Betrayals.php';
 
 class Treachery
 {
+	/*
+	Virgil says: congratulations, you've made it to the most depraved pits of darkness 
+	in PHP. As you'll see, there are many things that will try to bite you down here. 
+	You'll notice many of the atrocities can be caught early with judicious use of high
+	error reporting levels, and you are strongly encouraged to keep your error reporting
+	level at E_ALL. 
+	*/
+	
 	/**
 	 * @suppress_warnings
 	 */
@@ -130,6 +138,20 @@ class Treachery
 
 		restore_error_handler();
 	}
+	
+	/**
+	* @suppress_warnings
+	*/
+	public function less_than_operator_is_pretty_optimistic()
+	{
+		$a = INF;
+		$b = [];
+		$c = $this;
+		
+		assert_that($a < $b)->is_identical_to(true);
+		assert_that($b < $c)->is_identical_to(true);
+		assert_that($c < $a)->is_identical_to(true);
+	}
 
 	/**
 	* @suppress_warnings
@@ -145,7 +167,7 @@ class Treachery
 		assert_that($decoded->love)->is_identical_to(0);
 	}
 
-	public function ternary_operator_precedence()
+	public function ternary_operator_precedence_is_backwards()
 	{
 		// Virgil says: Beware the ternary operator. PHP is the only mainstream
 		// language that uses left associative ternary operators, making

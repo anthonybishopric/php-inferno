@@ -16,9 +16,47 @@ class ClassWithProperties
 
 class SimpleCalculator
 {
+	public function eulers_number()
+	{
+		return 2.71828;
+	}
+	
+	public function negate($value)
+	{
+		return $value * -1;
+	}
+		
 	public function add($a, $b)
 	{
 		return $a + $b;
+	}
+	
+	public function multiply($a, $b)
+	{
+		return $a * $b;
+	}
+	
+	public function divide($num, $den)
+	{
+		return $num / $den;
+	}
+	
+	public function subtract($left, $right)
+	{
+		return $left - $right;
+	}
+	
+	public function factorial($n)
+	{
+		if ($n < 0)
+		{
+			return null;
+		}
+		if ($n == 0)
+		{
+			return 1;
+		}
+		return $n * $this->factorial($n - 1);
 	}
 }
 

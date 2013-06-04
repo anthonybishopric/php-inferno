@@ -1,5 +1,7 @@
 <?php
 
+require_once 'classes/Maybe.php';
+
 /**
 * Callables
 */
@@ -183,6 +185,29 @@ class Anger
 		// try removing the "= null" default value assignment and see what happens
 		assert_that($add_five_to_argument(10), null)->is_equal_to(15);
 	}
+	
+	private function how_many_arguments()
+	{
+		$args = func_get_args();
+		return count($args);
+	}
+	
+	public function functions_can_reflect_on_their_arguments_as_arrays()
+	{
+		assert_that($this->how_many_arguments(1))->is_equal_to(1);
+		assert_that($this->how_many_arguments(100, 200, 150))->is_equal_to(3);
+	}
+	
+	public function functions_can_be_invoked_via_call_user_func()
+	{
+		$how_many = [$this, 'how_many_arguments'];
+		
+		$call_user_func_result = call_user_func($how_many, 10, 50);
+		$call_user_func_array_result = call_user_func_array($how_many, [100, 200, 150]);
+		
+		assert_that($call_user_func_result)->is_equal_to(2);
+		assert_that($call_user_func_array_result)->is_equal_to(3);
+	}
 
 	/**
 	* Concatenate the values of an array together, like implode(), but with
@@ -224,13 +249,180 @@ class Anger
 	}
 
 	/**
-	* Exercise V. The Dis DSL
+	* Exercise V. Write Dis Function
+	*
+	* Part I. 
+	*
+	* Dis, the lower level of Hell including the 5th Circle and everything below, is depicted
+	* as a city on the verge of war, with the Styx swamp encircling it. Naturally, the software
+	* engineers trapped in the city of Dis enjoy functional programming.
+	*
+	* In this exercise you'll be implementing a chaining operation using only functions that allows
+	* for safe execution over nullable values. Consider this example:
+	*
+	*  $some_value = some_function();
+	*  $another_value = some_other_function($some_value);
+	*  $final_value = last_function($another_value, 5);
+	*  return $final_value;
+	*
+	* In the above cases, it's possible for any of the functions used to return null. In order to be safe about
+	* execution in fully procedural code, we'd need to do something like this:
+	*
+	*  $some_value = some_function();
+	*  if ($some_value === null) {
+	* 	throw new UnexpectedValueException();
+	*  }
+	*  $another_value = some_other_function($some_value);
+	*  if ($another_value === null) {
+	* 	throw new UnexpectedValueException();
+	*  }
+	*  $final_value = last_function($another_value, 5);
+	*  if ($final_value === null) {
+	* 	throw new UnexpectedValueException();
+	*  }
+	*  return $final_value;
+	*  
+	* This code is hard to read and is heavily repetitive. To consolidate it, we'll implement three utility
+	* functions called start(), andThen() and resolve()
 	* 
-	* Domain-specific Languages (or DSLs) are languages designed solve problems in
-	* a particular domain well. Designing a lightweight DSL is easy with anonymous functions available. 
+	* The new code should look like this:
 	* 
-	* Dis, the lower level of Hell including and below the 5th Circle, is depicted
-	* as a city on the verge of war, with the Styx swamp encircling it. The mayor of Dis
-	* wants you, the Dis Assembler, to give the Mayor a convenient way of laying out his city.
+	* return start('some_function')
+	*		->andThen('some_other_function') 
+	* 		->andThen('last_function', 5)
+	*		->resolve();
+	*
+	* Under the hood, the utility functions will perform the boilerplate code to pass arguments, handle
+	* extra arguments sent to andThen and handle error cases appropriately.
+	* 
+	* The code to implement is in classes/Maybe.php
+	*/	
+	
+	public function the_maybe_works_in_the_simple_case()
+	{
+		$simple = new SimpleCalculator();
+		
+		$value = start([$simple, 'eulers_number'])->resolve();
+		assert_that($value)->is_equal_to(2.71828);
+	}
+	
+	public function it_can_chain_several_calls()
+	{
+		$simple = new SimpleCalculator();
+		
+		$value = start([$simple, 'eulers_number'])
+			->andThen([$simple, 'negate'])
+			->resolve();
+		
+		assert_that($value)->is_equal_to(-2.71828);
+	}
+	
+	public function arguments_are_passed_in_correctly()
+	{
+		$simple = new SimpleCalculator();
+		
+		$value = start([$simple, 'eulers_number'])
+			->andThen([$simple, 'negate'])
+			->andthen([$simple, 'multiply'], [10])
+			->resolve();
+		
+		assert_that($value)->is_equal_to(-27.1828);
+	}
+	
+	public function an_exception_is_thrown_for_anything_that_returns_null()
+	{
+		$simple = new SimpleCalculator();
+		
+		try
+		{
+			$value = start([$simple, 'eulers_number'])
+				->andThen([$simple, 'negate'])
+				->andThen([$simple, 'factorial'])
+				->resolve();
+			fail("Should not reach here");
+		}
+		catch (UnexpectedValueException $e)
+		{
+			
+		}
+		
+		assert_that(get_class($e))->is_equal_to('UnexpectedValueException');
+	}
+	
+	/** Part II
+	* 
+	* Now we have our basic MaybeMonad, let's add some syntactic sugar to make
+	* it feel more natural.
+	*
+	* Let's use a proxy object on top of our target. This way
+	* we can intercept all calls to it, delegate to the underlying function,
+	* and get the safety of checking the return value.
+	* 
+	* It'll be clearer written out:
+	*
+	* $calculator = new SimpleCalculator();
+	*
+	* $value = new MaybeComprehension($calculator)
+	*	->eulers_number()
+	*	->negate()
+	*	->multiply(10)
+	*	->_maybe_resolve();
+	*
+	* This provides exactly the same behavior as before, just with fewer arrays and strings.
 	*/
+	
+	public function the_comprehension_works_for_simple_calls()
+	{
+		$simple = new SimpleCalculator();
+	
+		$value = (new MaybeComprehension($simple))
+			->eulers_number()
+			->_maybe_resolve();
+		assert_that($value)->is_equal_to(2.71828);
+	}
+
+	public function the_comprehension_chains_multiple_calls()
+	{
+		$simple = new SimpleCalculator();
+	
+		$value = (new MaybeComprehension($simple))
+			->eulers_number()
+			->negate()
+			->_maybe_resolve();
+		assert_that($value)->is_equal_to(-2.71828);
+	}
+
+	public function the_comprehension_comprehension_arguments_are_passed_correctly()
+	{
+		$simple = new SimpleCalculator();
+	
+		$value = (new MaybeComprehension($simple))
+			->eulers_number()
+			->negate()
+			->multiply(10)
+			->_maybe_resolve();
+		assert_that($value)->is_equal_to(-27.1828);
+	}
+	
+	public function the_comprehension_comprehension_errors_when_a_null_is_returned()
+	{
+		$simple = new SimpleCalculator();
+	
+		try
+		{
+			$value = (new MaybeComprehension($simple))
+				->eulers_number()
+				->negate()
+				->multiply(10)
+				->factorial()
+				->_maybe_resolve();
+			fail("Should not reach here");
+		}
+		catch (UnexpectedValueException $e)
+		{
+			
+		}
+		
+		assert_that(get_class($e))->is_equal_to('UnexpectedValueException');
+	}
 }
