@@ -1,5 +1,7 @@
 <?php
 
+require_once 'classes/Inventory.php';
+
 /**
 * Type Interpolation
 */
@@ -123,7 +125,7 @@ class Heresy
 		$numeric1 = '123';
 		$numeric2 = '124';
 		$numeric3 = '0124';
-		
+
 		assert_that($numeric1 == '123')->is_equal_to(true);
 		assert_that($numeric2 > $numeric1)->is_equal_to(true);
 		assert_that($numeric3 > $numeric1)->is_equal_to(true);
@@ -138,17 +140,109 @@ class Heresy
 	public function object_equality_is_based_on_the_classname_and_object_properties()
 	{
 		$object1 = new ClassWithProperties();
+		$object2 = new ClassWithProperties();
+
+		assert_that($object1 == $object2)->is_equal_to(true);
+
+		$object2->property_one = 'bye';
+
+		assert_that($object1 == $object2)->is_equal_to(false);
 	}
 
 	public function object_containment_in_an_array_is_determined_by_equality_of_properties()
 	{
+		$object1 = new ClassWithProperties();
+		$object2 = new ClassWithProperties();
 
+		$array = [$object1];
+
+		assert_that(in_array($object2, $array))->is_equal_to(true);
 	}
 
 	public function object_containment_in_an_array_of_strings_determined_by_result_of__toString()
 	{
+		$object1 = new ClassWithToString();
+		$object1->set_string_value("wello!");
 
+		$array1 = [$object1];
+
+		assert_that(in_array('wello!', $array1))->is_equal_to(true);
+
+		$array2 = ['wello!'];
+
+		assert_that(in_array($object1, $array2))->is_equal_to(true);
+
+		// Virgil says: For this reason, adding __toString to objects is a non-trivial
+		// change to the functionality of your code. Be careful to understand the implications
+		// of doing so!
 	}
 
+	/**
+	* Exercise VI. The Power of Babel
+	*
+	* One of Epicurus's followers, Polyaenus, comes up to you, admitting that he had in life been
+	* a PHP developer. He had spent much time crafting functions that reveled in the decadent
+	* type juggling properties of PHP. In turn, he was punished for creating such untestable code.
+	*
+	* Virgil explains that he can begin his prayers of contrition by writing test cases that
+	* validate his existing code's behavior. Once those tests are passing, he can change that
+	* code to be safer using more strongly-typed paradigms. "Such is the path of a safe refactoring."
+	*
+	* Sure enough, the developer discovers that his original code doesn't work. You agree (reluctantly)
+	* to help him fix his code so that the tests pass.
+	*
+	* (yes, there actually was a person in Epicurus's following named Polyaenus of Lampsacus)
+	*
+	* The code for reference is in classes/Inventory.php
+	*/
 
+	public function the_cow_inventory_parses_your_cow_fields_and_gives_you_a_sorted_list()
+	{
+		$info = Inventory::parse_inventory('Bessie, Marjorie, Bilbo');
+		assert_that($info)->is_equal_to([
+			'cows' => 3,
+			'list' => ['Bessie', 'Bilbo', 'Marjorie']
+		]);
+	}
+
+	public function the_cow_inventory_can_take_an_array_of_strings()
+	{
+		$info = Inventory::parse_inventory(['Bessie, Bilbo, Marjorie']);
+		assert_that($info)->is_equal_to([
+			'cows' => 3,
+			'list' => ['Bessie', 'Bilbo', 'Marjorie']
+		]);
+	}
+
+	public function the_cow_inventory_can_have_interestingly_named_cows()
+	{
+		$info = Inventory::parse_inventory(['Bessie, Bilbo, Marjorie, 0']);
+		assert_that($info)->is_equal_to([
+			'cows' => 4,
+			'list' => ['0', 'Bessie', 'Bilbo', 'Marjorie']
+		]);
+	}
+	
+	public function each_name_can_be_its_own_entry()
+	{
+		$info = Inventory::parse_inventory(['Bessie', 'Bilbo', 'Marjorie', 0]);
+		assert_that($info)->is_equal_to([
+			'cows' => 4,
+			'list' => ['0', 'Bessie', 'Bilbo', 'Marjorie']
+		]);
+	}
+
+	public function the_cow_inventory_displays_frequencies_of_cow_names_when_passed_in_different_form()
+	{
+		$info = Inventory::parse_inventory(['Bessie, Bilbo, Marjorie, 0, Belinda'], 'freq');
+		assert_that($info)->is_equal_to([
+			'cows' => 5,
+			'list' => ['0', 'Belinda', 'Bessie', 'Bilbo', 'Marjorie'],
+			'freq' =>[
+				'0' => 1,
+				'B' => 3,
+				'M' => 1
+			]
+		]);
+	}
 }
