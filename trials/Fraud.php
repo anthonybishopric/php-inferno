@@ -1,7 +1,7 @@
 <?php
 
 /**
-* PHP INI
+* SPL
 */
 class Fraud
 {

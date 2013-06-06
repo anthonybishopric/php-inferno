@@ -32,7 +32,7 @@ class That
 			throw new AssertException(inferno_sprintf("Expected %s but was %s", $other, $this->th));
 		}
 	}
-	
+
 	public function is_identical_to($other)
 	{
 		if ($this->th !== $other)
@@ -40,7 +40,7 @@ class That
 			throw new AssertException(inferno_sprintf("Expected %s to be identical to %s, but it wasn't", $other, $this->th));
 		}
 	}
-	
+
 	public function is_instance_of($other)
 	{
 		if (!is_a($this->th, $other))
@@ -48,12 +48,20 @@ class That
 			throw new AssertException(inferno_sprintf("Expected %s to be an instance of %s but was %s", $this->th, $other, get_class($this->th)));
 		}
 	}
-	
+
+	public function contains_string($other)
+	{
+		if (strpos($this->th, $other) === false)
+		{
+			throw new AssertException(inferno_sprintf("Expected '%s' to contain the string %s but it didn't", $this->th, $other));
+		}
+	}
+
 }
 
 class AssertException extends Exception
 {
-	
+
 }
 
 function inferno_sprintf($message/*, $arg1, $arg2 */)
