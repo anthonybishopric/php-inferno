@@ -168,6 +168,14 @@ class Violence
 		assert_that($trace[0]['function'])->is_identical_to('backtraces_can_be_generated_at_any_time');
 		assert_that($trace[0]['class'])->is_identical_to('Violence');
 	}
+	
+	public function set_error_handler_can_be_used_to_intercept_nonfatal_php_errors()
+	{
+		set_error_handler(function($errno, $errmsg)
+		{
+			
+		});
+	}
 
 	public function trigger_error_can_be_used_to_emit_php_builtin_error_messages()
 	{
@@ -175,11 +183,6 @@ class Violence
 	}
 
 	public function try_catch_blocks_cannot_catch_php_errors()
-	{
-
-	}
-
-	public function set_error_handler_can_be_used_to_intercept_nonfatal_php_errors()
 	{
 
 	}
