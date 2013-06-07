@@ -387,3 +387,8 @@ class Bonsai_Tree extends Plant
 		return parent::height_in_feet();
 	}
 }
+
+class CustomException extends Exception
+{
+	// that's it!
+}

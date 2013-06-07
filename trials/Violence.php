@@ -1,5 +1,7 @@
 <?php
 
+require_once 'classes/Finally.php';
+
 /**
 * Exceptions and Errors
 */
@@ -7,37 +9,164 @@ class Violence
 {
 	public function exceptions_are_objects()
 	{
-
+		$exception = new Exception();
+		assert_that(is_object($exception))->is_identical_to(true);
 	}
 
 	public function all_exceptions_descend_from_the_class_Exception()
 	{
+		$exception1 = new InvalidArgumentException();
+		$exception2 = new BadMethodCallException();
 
+		assert_that($exception1 instanceof Exception)->is_identical_to(true);
+		assert_that($exception2 instanceof Exception)->is_identical_to(true);
 	}
 
-	public function exceptions_can_be_thrown_and_caught()
+	public function exceptions_can_be_thrown_and_caught_which_interrupts_program_flow()
 	{
-
+		$value = 0;
+		try
+		{
+			$value += 10;
+			throw new Exception();
+			$value += 50;
+		}
+		catch (Exception $e)
+		{
+			$value -= 5;
+		}
+		assert_that($value)->is_identical_to(5);
 	}
 
 	public function exceptions_are_caught_in_order_specified_by_the_catch_clauses()
 	{
+		$value = 0;
+		try
+		{
+			throw new InvalidArgumentException();
+		}
+		catch(InvalidArgumentException $e)
+		{
+			$value = 5;
+		}
+		catch(Exception $e)
+		{
+			$value = 10;
+		}
+		assert_that($value)->is_identical_to(5);
 
+	}
+
+	public function exceptions_are_handled_as_soon_as_the_catch_type_matches()
+	{
+		$value = 0;
+		try
+		{
+			throw new InvalidArgumentException();
+		}
+		catch (LengthException $e)
+		{
+			$value = 5;
+		}
+		catch (BadMethodCallException $e)
+		{
+			$value = 10;
+		}
+		catch (InvalidArgumentException $e)
+		{
+			$value = 20;
+		}
+		assert_that($value)->is_identical_to(20);
+	}
+
+	private function get_person_in_7th_circle($index)
+	{
+		$values = ['Geryon', 'Phlegethon', 'Polydorus'];
+		if ($index >= count($values))
+		{
+			throw new OutOfBoundsException("Index is out of bounds");
+		}
+		return $values[$index];
 	}
 
 	public function a_distinct_exception_type_should_be_used_for_problems()
 	{
+		$message = null;
 
+		try
+		{
+			$person = $this->get_person_in_7th_circle(4);
+			if ($person != 'Phlegethon')
+			{
+				throw new DomainException('I only wanted Phlegethon');
+			}
+		}
+		catch (Exception $e)
+		{
+			$message_to_customers = 'Sorry, you picked the wrong eternal sufferer. Please try again.';
+		}
+
+		assert_that($message_to_customers)->contains_string('Sorry');
+		assert_that(get_class($e))->is_identical_to('OutOfBoundsException');
+
+		// Virgil says: Using a generic Exception handler (one that catches the base type Exception instead
+		// of a subclass) is a bad idea. In this case, a program bug was presented to our customers
+		// as an action that they need to take. Always catch the most specific exception possible.
 	}
 
 	public function custom_exceptions_are_straightforward()
 	{
+		// see classes/SampleClasses.php at the bottom
+		try
+		{
+			throw new CustomException("wello!");
+		}
+		catch (CustomException $e)
+		{
 
+		}
+		assert_that(get_class($e))->is_identical_to('CustomException');
+		assert_that($e->getMessage())->is_identical_to('wello!');
 	}
 
 	public function exceptions_have_error_codes_that_can_be_customized()
 	{
+		try
+		{
+			throw new CustomException("wello!", 10);
+		}
+		catch (CustomException $e)
+		{
 
+		}
+
+		assert_that($e->getCode())->is_identical_to(10);
+	}
+
+	public function exceptions_have_a_stack_trace_you_can_inspect_for_debugging_purposes()
+	{
+		try
+		{
+			throw new CustomException();
+		}
+		catch (CustomException $e)
+		{
+
+		}
+		$trace = $e->getTrace();
+		// check out http://www.php.net/manual/en/function.debug-backtrace.php
+		// for details about how it's structured
+
+		assert_that($trace[0]['function'])->is_identical_to('exceptions_have_a_stack_trace_you_can_inspect_for_debugging_purposes');
+		assert_that($trace[0]['class'])->is_identical_to('Violence');
+	}
+
+	public function backtraces_can_be_generated_at_any_time()
+	{
+		$trace = debug_backtrace();
+
+		assert_that($trace[0]['function'])->is_identical_to('backtraces_can_be_generated_at_any_time');
+		assert_that($trace[0]['class'])->is_identical_to('Violence');
 	}
 
 	public function trigger_error_can_be_used_to_emit_php_builtin_error_messages()
@@ -128,7 +257,125 @@ class Violence
 	* Exercise VII. Finally!
 	*
 	* Having made it this far, you've already seen some of the darker things in the language.
+	* Given all the idiosyncracies of PHP, it's well worth the effort to find safer ways
+	* to achieve common patterns that are present in other languages.
 	*
+	* One such thing is the finally statement, which is a way of expressing that something should
+	* happen no matter whether a try/catch block exited with an error or not. Here's what it looks
+	* like in the yet-to-be-released PHP 5.5
 	*
+	* try
+	* {
+	*   $curl = new Curl();
+	*   $curl->open();
+	*   return $curl->get('http://something.com');
+	* }
+	* catch (HttpException $e)
+	* {
+	*   return "This service is not available";
+	* }
+	* finally
+	* {
+	*   $curl->close(); // free resources
+	* }
+	*
+	* The contents of the finally block are guaranteed to be invoked, whether or not an exception
+	* is thrown or a value is returned. Finally blocks are a concise way of expressing that the
+	* same operation should happen in both the ok and error cases, which has to happen without
+	* the finally statement:
+	* try
+	* {
+	*   $curl = new Curl();
+	*   $curl->open();
+	*   $result = $curl->get('http://something.com');
+	*   $curl->close();
+	*   return $result;
+	* }
+	* catch (HttpException $e)
+	* {
+	*   $curl->close();
+	*   return "This service is not available";
+	* }
+	*
+	* Let's implement the finally block in PHP. If you are already on PHP 5.5, you are encouraged
+	* to use the real thing.
+	*
+	* Note: because you cannot tell a function that returns null from a function that doesn't
+	* have a return statement, our try-catch-finally mechanism won't be able to tell the difference.
+	* Also note that using branching logic inside of finally statements is considered a Bad Idea, since
+	* in can easily mask control logic happening in the try or catch blocks.
 	*/
+
+	public function try_catch_finally_simulator_correctly_runs_basic_functions()
+	{
+		$value = try_catch_finally(function()
+		{
+			return 50;
+		});
+
+		assert_that($value)->is_identical_to(50);
+	}
+
+	public function try_catch_finally_simulator_correctly_allows_you_to_pass_a_catch_clause_that_gets_executed_if_an_exception_is_thrown()
+	{
+		$value = try_catch_finally(function()
+		{
+			return 50;
+		}, function()
+		{
+			return 10;
+		});
+
+		assert_that($value)->is_identical_to(50);
+	}
+
+	public function try_catch_finally_will_call_catch_clause_if_exception_is_thrown()
+	{
+		$value = try_catch_finally(function()
+		{
+			throw new Exception();
+		}, function()
+		{
+			return 10;
+		});
+
+		assert_that($value)->is_identical_to(10);
+	}
+
+	public function try_catch_finally_will_call_finally_block_if_exception_not_thrown()
+	{
+		$called_finally = false;
+		$value = try_catch_finally(function()
+		{
+			return 50;
+		}, function()
+		{
+			return 10;
+		}, function() use (&$called_finally)
+		{
+			$called_finally = true;
+		});
+
+		assert_that($value)->is_identical_to(50);
+		assert_that($called_finally)->is_identical_to(true);
+	}
+
+	public function try_catch_finally_will_call_finally_block_if_exception_is_thrown()
+	{
+		$called_finally = false;
+		$value = try_catch_finally(function()
+		{
+			throw new Exception();
+		}, function()
+		{
+			return 10;
+		}, function() use (&$called_finally)
+		{
+			$called_finally = true;
+		});
+
+		assert_that($value)->is_identical_to(10);
+		assert_that($called_finally)->is_identical_to(true);
+	}
+
 }

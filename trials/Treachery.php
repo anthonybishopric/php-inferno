@@ -5,13 +5,13 @@ require_once __DIR__ . '/classes/Betrayals.php';
 class Treachery
 {
 	/*
-	Virgil says: congratulations, you've made it to the most depraved pits of darkness 
-	in PHP. As you'll see, there are many things that will try to bite you down here. 
+	Virgil says: congratulations, you've made it to the most depraved pits of darkness
+	in PHP. As you'll see, there are many things that will try to bite you down here.
 	You'll notice many of the atrocities can be caught early with judicious use of high
 	error reporting levels, and you are strongly encouraged to keep your error reporting
-	level at E_ALL. 
+	level at E_ALL.
 	*/
-	
+
 	/**
 	 * @suppress_warnings
 	 */
@@ -138,7 +138,7 @@ class Treachery
 
 		restore_error_handler();
 	}
-	
+
 	/**
 	* @suppress_warnings
 	*/
@@ -147,7 +147,7 @@ class Treachery
 		$a = INF;
 		$b = [];
 		$c = $this;
-		
+
 		assert_that($a < $b)->is_identical_to(true);
 		assert_that($b < $c)->is_identical_to(true);
 		assert_that($c < $a)->is_identical_to(true);
@@ -244,6 +244,15 @@ class Treachery
 		assert_that($an_array{1})->is_equal_to(2);
 	}
 
+	public function objects_inheriting_from_array_access_are_not_arrays()
+	{
+		// remember Exercise II?
+		$reverse_array = new ReverseArray(0);
+		$reverse_array[0] = 'wello!';
+		assert_that($reverse_array[0])->is_identical_to('wello!');
+		assert_that(is_array($reverse_array))->is_identical_to(false);
+
+	}
 
 	public function floats_and_doubles_are_the_same_thing()
 	{
@@ -278,5 +287,17 @@ class Treachery
 		list($manfred, $alberigo) = array('bring', 'the fruit!');
 		assert_that($manfred)->is_equal_to('bring');
 		assert_that($alberigo)->is_equal_to('the fruit!');
+	}
+
+	public function eval_lets_you_execute_arbitrary_strings_as_code()
+	{
+
+		$result = eval("return 'wello!';");
+		assert_that($result)->is_identical_to('wello!');
+
+		// Virgil: eval is an incredibly unsafe mechanism. Never, ever use it in practice, especially
+		// when user input is considered, as you could give a malicious attacker the ability
+		// to take control of your system. Although there is a disable_functions option in php.ini,
+		// eval cannot be disabled because - like isset() and family - it is not a real function.
 	}
 }
