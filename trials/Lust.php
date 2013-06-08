@@ -5,6 +5,7 @@
 */
 class Lust
 {
+
 	public function the_old_way_of_making_arrays()
 	{
 		$empty_array = array();
@@ -15,6 +16,13 @@ class Lust
 	{
 		$empty_array = []; // square brackets create an array
 		assert_that(count($empty_array))->is_identical_to(0);
+	}
+
+	public function arrays_are_neither_objects_nor_scalars()
+	{
+		$array = [];
+		assert_that(is_object($array))->is_identical_to(false);
+		assert_that(is_scalar($array))->is_identical_to(false);
 	}
 
 	public function you_can_add_things_to_arrays()
@@ -128,15 +136,15 @@ class Lust
 
 	/*
 	Virgil says: You shouldn't test arrays without using a function. The statement
-	
+
 	if ($my_array[$key])
 	{
 		....
 	}
-	
+
 	works but it's ambiguous what it means. If you use this on an array where the
 	key is missing, PHP will emit a warning.
-	
+
 	*/
 
 	public function array_merge_combines_two_arrays()
