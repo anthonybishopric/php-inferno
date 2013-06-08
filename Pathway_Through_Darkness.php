@@ -44,8 +44,7 @@ class Pathway_Through_Darkness
 				}
 			}
 		}
-		$this->print_total();
-		echo "Some quote here\n";
+		echo "Thence we came forth to rebehold the stars.\n";
 	}
 	
 	private function build_trial(ReflectionClass $rfl_class, ReflectionMethod $method)

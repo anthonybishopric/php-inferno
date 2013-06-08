@@ -300,4 +300,17 @@ class Treachery
 		// to take control of your system. Although there is a disable_functions option in php.ini,
 		// eval cannot be disabled because - like isset() and family - it is not a real function.
 	}
+
+	public function phpcredits_shows_the_folks_that_made_the_language()
+	{
+		// The ob_* functions allow us to capture output sent to stdout. 
+		// to see the content of $result, comment out ob_start/ob_get_clean
+		ob_start();
+		phpcredits(CREDITS_GENERAL);
+		$result = ob_get_clean();
+		
+		
+		
+		assert_that($result)->contains_string('Rasmus');
+	}
 }

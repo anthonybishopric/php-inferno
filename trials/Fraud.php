@@ -65,12 +65,12 @@ class Fraud
 	public function spl_object_storage_can_be_used_like_a_set()
 	{
 		$spl_storage = new SplObjectStorage();
-		
+
 		$an_object = new ClassWithProperties();
-		
+
 		$spl_storage->attach($an_object);
 		$spl_storage->attach($an_object);
-		
+
 		assert_that(count($spl_storage))->is_identical_to(1);
 	}
 
@@ -170,23 +170,25 @@ class Fraud
 	public function spl_autoload_register_will_let_you_add_a_callable_to_automatically_locate_classes()
 	{
 		assert_that(class_exists('Manto'))->is_identical_to(false);
-		
+
 		$loading_function = function($classname)
 		{
 			require_once 'classes/AutoloadedClass.php';
 		};
 		spl_autoload_register($loading_function);
-		
+
 		assert_that(class_exists('Manto'))->is_identical_to(true);
-		
+
 		$manto = new Manto();
 		assert_that($manto->daugher_of())->is_identical_to('Tiresias');
 	}
-	
+
 	public function objects_that_implement_the_JsonSerializable_interface_have_a_custom_json_encode()
 	{
+		// NumberRange is defined in classes/SPLClasses.php
+
 		$number_range = new NumberRange(1, 10);
 		assert_that(json_encode($number_range))->is_identical_to('[1,2,3,4,5,6,7,8,9,10]');
 	}
-	
+
 }
