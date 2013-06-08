@@ -70,15 +70,10 @@ class Pathway_Through_Darkness
 		preg_match_all('/@([a-zA-Z\_]+)/', $comment, $matches);
 		if (count($matches) > 1 && in_array('suppress_warnings', $matches[1]))
 		{
-			$old_level = error_reporting();
-			$new_level = $old_level ^ E_WARNING ^ E_NOTICE ^ E_STRICT;
-			error_reporting($new_level);
+			error_reporting(E_ALL ^ E_WARNING ^ E_NOTICE ^ E_STRICT);
 		}
 		$fn();
-		if (isset($old_level))
-		{
-			error_reporting($old_level);
-		}
+		error_reporting(E_ALL);
 	}
 	
 	private function print_total()

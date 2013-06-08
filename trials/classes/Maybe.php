@@ -2,7 +2,6 @@
 
 function start(callable $first_function, array $args=[])
 {
-	// implement me!
 	$monad = new MaybeMonad();
 	$monad->andThen($first_function, $args);
 	return $monad;
@@ -18,31 +17,14 @@ class MaybeMonad
 		
 	public function andThen(callable $next_function, array $extra_params=[])
 	{
-		$this->callables[] = partial_right($next_function, $extra_params);
+		// implement me!
 		return $this;
 	}
 	
 	public function resolve()
 	{
 		// implement me!
-		$has_result = false;
-		foreach ($this->callables as $callable)
-		{
-			if ($has_result)
-			{
-				$result = $callable($result);
-			}
-			else
-			{
-				$result = $callable();
-				$has_result = true;
-			}
-			if ($result === null)
-			{
-				throw new UnexpectedValueException();
-			}
-		}
-		return $result;
+		return $this;
 	}
 }
 
@@ -97,13 +79,12 @@ class MaybeComprehension
 	public function _maybe_resolve()
 	{
 		// implement me!
-		return $this->monad->resolve();
+		return $this;
 	}
 	
 	public function __call($name, $args)
 	{
 		// implement me!
-		$this->monad->andThen([$this->target_object, $name], $args);
 		return $this;
 	}
 }

@@ -10,7 +10,7 @@ class Violence
 	public function exceptions_are_objects()
 	{
 		$exception = new Exception();
-		assert_that(is_object($exception))->is_identical_to(true);
+		assert_that(is_object($exception))->is_identical_to(__);
 	}
 
 	public function all_exceptions_descend_from_the_class_Exception()
@@ -18,8 +18,8 @@ class Violence
 		$exception1 = new InvalidArgumentException();
 		$exception2 = new BadMethodCallException();
 
-		assert_that($exception1 instanceof Exception)->is_identical_to(true);
-		assert_that($exception2 instanceof Exception)->is_identical_to(true);
+		assert_that($exception1 instanceof Exception)->is_identical_to(__);
+		assert_that($exception2 instanceof Exception)->is_identical_to(__);
 	}
 
 	public function exceptions_can_be_thrown_and_caught_which_interrupts_program_flow()
@@ -35,7 +35,7 @@ class Violence
 		{
 			$value -= 5;
 		}
-		assert_that($value)->is_identical_to(5);
+		assert_that($value)->is_identical_to(__);
 	}
 
 	public function exceptions_are_caught_in_order_specified_by_the_catch_clauses()
@@ -53,7 +53,7 @@ class Violence
 		{
 			$value = 10;
 		}
-		assert_that($value)->is_identical_to(5);
+		assert_that($value)->is_identical_to(__);
 
 	}
 
@@ -76,7 +76,7 @@ class Violence
 		{
 			$value = 20;
 		}
-		assert_that($value)->is_identical_to(20);
+		assert_that($value)->is_identical_to(__);
 	}
 
 	private function get_person_in_7th_circle($index)
@@ -106,8 +106,8 @@ class Violence
 			$message_to_customers = 'Sorry, you picked the wrong eternal sufferer. Please try again.';
 		}
 
-		assert_that($message_to_customers)->contains_string('Sorry');
-		assert_that(get_class($e))->is_identical_to('OutOfBoundsException');
+		assert_that($message_to_customers)->contains_string(__);
+		assert_that(get_class($e))->is_identical_to(__);
 
 		// Virgil says: Using a generic Exception handler (one that catches the base type Exception instead
 		// of a subclass) is a bad idea. In this case, a program bug was presented to our customers
@@ -125,8 +125,8 @@ class Violence
 		{
 
 		}
-		assert_that(get_class($e))->is_identical_to('CustomException');
-		assert_that($e->getMessage())->is_identical_to('wello!');
+		assert_that(get_class($e))->is_identical_to(__);
+		assert_that($e->getMessage())->is_identical_to(__);
 	}
 
 	public function exceptions_have_error_codes_that_can_be_customized()
@@ -140,7 +140,7 @@ class Violence
 
 		}
 
-		assert_that($e->getCode())->is_identical_to(10);
+		assert_that($e->getCode())->is_identical_to(__);
 	}
 
 	public function exceptions_have_a_stack_trace_you_can_inspect_for_debugging_purposes()
@@ -157,16 +157,16 @@ class Violence
 		// check out http://www.php.net/manual/en/function.debug-backtrace.php
 		// for details about how it's structured
 
-		assert_that($trace[0]['function'])->is_identical_to('exceptions_have_a_stack_trace_you_can_inspect_for_debugging_purposes');
-		assert_that($trace[0]['class'])->is_identical_to('Violence');
+		assert_that($trace[0]['function'])->is_identical_to(__);
+		assert_that($trace[0]['class'])->is_identical_to(__);
 	}
 
 	public function backtraces_can_be_generated_at_any_time()
 	{
 		$trace = debug_backtrace();
 
-		assert_that($trace[0]['function'])->is_identical_to('backtraces_can_be_generated_at_any_time');
-		assert_that($trace[0]['class'])->is_identical_to('Violence');
+		assert_that($trace[0]['function'])->is_identical_to(__);
+		assert_that($trace[0]['class'])->is_identical_to(__);
 	}
 
 	public function set_error_handler_can_be_used_to_intercept_nonfatal_php_errors()
@@ -183,8 +183,8 @@ class Violence
 		$person = 'Phlegethon';
 		$noop = $person['Geryon'];
 
-		assert_that($received_err_code)->is_identical_to(E_WARNING);
-		assert_that($received_err_message)->contains_string('Illegal string offset');
+		assert_that($received_err_code)->is_identical_to(__);
+		assert_that($received_err_message)->contains_string(__);
 
 		restore_error_handler();
 	}
@@ -203,8 +203,8 @@ class Violence
 		// http://www.php.net/manual/en/errorfunc.constants.php
 		trigger_error('Phlegethon translates to "river of fire"');
 
-		assert_that($received_err_code)->is_identical_to(E_USER_NOTICE);
-		assert_that($received_err_message)->contains_string('translates');
+		assert_that($received_err_code)->is_identical_to(__);
+		assert_that($received_err_message)->contains_string(__);
 
 		restore_error_handler();
 	}
@@ -222,13 +222,13 @@ class Violence
 
 	public function the_error_reporting_level_is_a_bitmask_over_what_error_types_are_emitted()
 	{
-		assert_that((error_reporting() & E_WARNING) > 0)->is_identical_to(true);
-		assert_that((error_reporting() & E_STRICT) > 0)->is_identical_to(true);
+		assert_that((error_reporting() & E_WARNING) > 0)->is_identical_to(__);
+		assert_that((error_reporting() & E_STRICT) > 0)->is_identical_to(__);
 
 		$old_value = error_reporting(E_ALL & ~E_STRICT); // calling it with an argument changes the reporting level
 
-		assert_that((error_reporting() & E_WARNING) > 0)->is_identical_to(true);
-		assert_that((error_reporting() & E_STRICT) > 0)->is_identical_to(false);
+		assert_that((error_reporting() & E_WARNING) > 0)->is_identical_to(__);
+		assert_that((error_reporting() & E_STRICT) > 0)->is_identical_to(__);
 
 		error_reporting($old_value);
 	}
@@ -245,7 +245,7 @@ class Violence
 
 		assert(false);
 
-		assert_that($message)->contains_string('Assertion failed');
+		assert_that($message)->contains_string(__);
 
 		restore_error_handler();
 	}
@@ -260,7 +260,7 @@ class Violence
 
 		assert(false, "The harpies are everywhere!");
 
-		assert_that($message)->contains_string('The harpies');
+		assert_that($message)->contains_string(__);
 
 		restore_error_handler();
 	}
@@ -274,7 +274,7 @@ class Violence
 		{
 			// hint: this is one of the PHP error level constants.
 			// http://php.net/manual/en/errorfunc.constants.php
-			assert_that($errno)->is_identical_to(E_WARNING);
+			assert_that($errno)->is_identical_to(__);
 		});
 
 		assert(false);

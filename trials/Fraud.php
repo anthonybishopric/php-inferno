@@ -23,9 +23,9 @@ class Fraud
 
 		}
 
-		assert_that(count($array))->is_identical_to(3);
-		assert_that(get_class($e))->is_identical_to('RuntimeException');
-		assert_that($e->getMessage())->contains_string('invalid or out of range');
+		assert_that(count($array))->is_identical_to(__);
+		assert_that(get_class($e))->is_identical_to(__);
+		assert_that($e->getMessage())->contains_string(__);
 
 	}
 
@@ -41,8 +41,8 @@ class Fraud
 
 		}
 
-		assert_that(isset($result))->is_identical_to(false);
-		assert_that($e->getMessage())->contains_string('invalid or out of range');
+		assert_that(isset($result))->is_identical_to(__);
+		assert_that($e->getMessage())->contains_string(__);
 	}
 
 	public function spl_min_and_max_heaps_are_available_to_do_sort_operations()
@@ -59,7 +59,7 @@ class Fraud
 			$result[] = $value;
 		}
 
-		assert_that($result)->is_identical_to([2, 5, 10, 20]);
+		assert_that($result)->is_identical_to(__);
 	}
 
 	public function spl_object_storage_can_be_used_like_a_set()
@@ -71,7 +71,7 @@ class Fraud
 		$spl_storage->attach($an_object);
 		$spl_storage->attach($an_object);
 
-		assert_that(count($spl_storage))->is_identical_to(1);
+		assert_that(count($spl_storage))->is_identical_to(__);
 	}
 
 	public function spl_priority_queue_is_useful_for_custom_priorities()
@@ -89,7 +89,7 @@ class Fraud
 			$result[] = $value;
 		}
 
-		assert_that(implode($result))->is_identical_to('Simon');
+		assert_that(implode($result))->is_identical_to(__);
 	}
 
 	public function classes_that_implement_countable_get_the_count_function_for_free()
@@ -99,7 +99,7 @@ class Fraud
 		$credit_rating = new CreditRating();
 		$credit_rating->set_credit_rating('AAA');
 
-		assert_that(count($credit_rating))->is_identical_to(3);
+		assert_that(count($credit_rating))->is_identical_to(__);
 	}
 
 	public function classes_that_implement_traversable_can_be_iterated_over()
@@ -114,7 +114,7 @@ class Fraud
 		{
 			$result[] = $char;
 		}
-		assert_that($result)->is_identical_to(['G', 'u', 'i', 'd', 'o']);
+		assert_that($result)->is_identical_to(__);
 	}
 
 	public function the_filter_iterator_allows_callbacks_to_remove_entries()
@@ -129,7 +129,7 @@ class Fraud
 		{
 			$result[] = $char;
 		}
-		assert_that($result)->is_identical_to(['u', 'o']);
+		assert_that($result)->is_identical_to(__);
 	}
 
 	public function regex_iterator_filters_by_regex()
@@ -145,7 +145,7 @@ class Fraud
 			$results[] = $person;
 		}
 
-		assert_that($results)->is_identical_to(['Pope Boniface', 'Pope Clement']);
+		assert_that($results)->is_identical_to(__);
 	}
 
 	public function the_append_iterator_lets_you_combine_multiple_iterators_together()
@@ -159,7 +159,7 @@ class Fraud
 		{
 			$result[] = $char;
 		}
-		assert_that(implode($result))->is_identical_to('CiampoloCaiaphas');
+		assert_that(implode($result))->is_identical_to(__);
 
 		// Virgil says: there are many more built-in iterators than this one, including
 		// CachingIterator, InfiniteIterator, FilesystemIterator and others.
@@ -173,14 +173,17 @@ class Fraud
 
 		$loading_function = function($classname)
 		{
-			require_once 'classes/AutoloadedClass.php';
+			if ($classname === 'Manto')
+			{
+				require_once 'classes/AutoloadedClass.php';
+			}
 		};
 		spl_autoload_register($loading_function);
 
-		assert_that(class_exists('Manto'))->is_identical_to(true);
+		assert_that(class_exists('Manto'))->is_identical_to(__);
 
 		$manto = new Manto();
-		assert_that($manto->daugher_of())->is_identical_to('Tiresias');
+		assert_that($manto->daugher_of())->is_identical_to(__);
 	}
 
 	public function objects_that_implement_the_JsonSerializable_interface_have_a_custom_json_encode()
@@ -188,7 +191,7 @@ class Fraud
 		// NumberRange is defined in classes/SPLClasses.php
 
 		$number_range = new NumberRange(1, 10);
-		assert_that(json_encode($number_range))->is_identical_to('[1,2,3,4,5,6,7,8,9,10]');
+		assert_that(json_encode($number_range))->is_identical_to(__);
 	}
 
 }
