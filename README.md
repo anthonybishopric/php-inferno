@@ -44,7 +44,6 @@ The worst sins in the language, reserved for the lowest level of Hell.
 
 ## TODO
 
-* Violence
 * Fraud
 * Fraud Exercise
 * Treachery Exercise

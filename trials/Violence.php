@@ -168,43 +168,69 @@ class Violence
 		assert_that($trace[0]['function'])->is_identical_to('backtraces_can_be_generated_at_any_time');
 		assert_that($trace[0]['class'])->is_identical_to('Violence');
 	}
-	
+
 	public function set_error_handler_can_be_used_to_intercept_nonfatal_php_errors()
 	{
-		set_error_handler(function($errno, $errmsg)
+		$received_err_code = null;
+		$received_err_message = null;
+		set_error_handler(function($errno, $errmsg) use (&$received_err_message, &$received_err_code)
 		{
-			
+			$received_err_code = $errno;
+			$received_err_message = $errmsg;
 		});
-	}
 
+		// indexing a string with another string emits a warning
+		$person = 'Phlegethon';
+		$noop = $person['Geryon'];
+
+		assert_that($received_err_code)->is_identical_to(E_WARNING);
+		assert_that($received_err_message)->contains_string('Illegal string offset');
+
+		restore_error_handler();
+	}
 	public function trigger_error_can_be_used_to_emit_php_builtin_error_messages()
 	{
+		$received_err_code = null;
+		$received_err_message = null;
+		set_error_handler(function($errno, $errmsg) use (&$received_err_message, &$received_err_code)
+		{
+			$received_err_code = $errno;
+			$received_err_message = $errmsg;
+		});
 
-	}
+		// Note: you can only trigger errors in the E_USER_* family of constants.
+		// The second argument to this function can be an actual error value.
+		// http://www.php.net/manual/en/errorfunc.constants.php
+		trigger_error('Phlegethon translates to "river of fire"');
 
-	public function try_catch_blocks_cannot_catch_php_errors()
-	{
+		assert_that($received_err_code)->is_identical_to(E_USER_NOTICE);
+		assert_that($received_err_message)->contains_string('translates');
 
-	}
-
-	public function set_exception_handler_can_catch_uncaught_exceptions_at_a_global_level()
-	{
-
+		restore_error_handler();
 	}
 
 	public function fatal_errors_are_uncatchable()
 	{
+		set_error_handler(function()
+		{
+			// nada
+		});
 
+		// uncomment me
+		// trigger_error('You cannot stop me', E_USER_ERROR);
 	}
 
-	public function the_error_reporting_level_indicates_what_error_types_are_emitted()
+	public function the_error_reporting_level_is_a_bitmask_over_what_error_types_are_emitted()
 	{
+		assert_that((error_reporting() & E_WARNING) > 0)->is_identical_to(true);
+		assert_that((error_reporting() & E_STRICT) > 0)->is_identical_to(true);
 
-	}
+		$old_value = error_reporting(E_ALL & ~E_STRICT); // calling it with an argument changes the reporting level
 
-	public function the_error_reporting_level_can_be_changed()
-	{
+		assert_that((error_reporting() & E_WARNING) > 0)->is_identical_to(true);
+		assert_that((error_reporting() & E_STRICT) > 0)->is_identical_to(false);
 
+		error_reporting($old_value);
 	}
 
 	public function assert_can_be_used_to_emit_php_errors_when_a_precondition_fails()
