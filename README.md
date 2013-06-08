@@ -1,10 +1,20 @@
 # The PHP Inferno
 
-![Hell](hell.jpg)
+The PHP inferno is a guided set of exercises through PHP Hell. It is a cautionary tale about the features of PHP and how to use them safely. You will learn of the sins of the language and how to remain pious even in the darkest PHP codebases. 
+
+_PHP 5.4.9 and higher is required to begin._
+
+## Getting started
+
+* Clone the PHP Inferno to your local hellgate.
+* PHP 5.4 can be installed via [homebrew](http://mxcl.github.io/homebrew/) and tapping the [PHP homebrew Recipes](https://github.com/josegonzalez/homebrew-php).
+* In BASH or any terminal that supports ANSI coloring, run:
+
+		>	cd php-inferno/
+		>	php descent.php
 
 ## A set of guided exercises through PHP Hell
 
-The PHP inferno is a cautionary tale about the features of PHP and how to use them safely. You will learn of the sins of the language and how to remain pious even in the darkest PHP codebases.
 
 ### Limbo
 
@@ -36,12 +46,8 @@ Exceptions and errors in PHP brutally alter programs.
 
 ### Fraud
 
-PHP's INI file is filled with contradictions. Who are you PHP?
+PHP likes to misrepresent itself as entirely procedural, when that's not the case.
 
 ### Treachery
 
 The worst sins in the language, reserved for the lowest level of Hell.
-
-## TODO
-
-* Replace answers with __
