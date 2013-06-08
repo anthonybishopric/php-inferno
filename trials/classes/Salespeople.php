@@ -1,130 +1,87 @@
 <?php
 
+/**
+* Things to implement in this file:
+* - SalesHiearchy::build()
+* - Salesperson::get_best_sales_rep()
+* - The success_rate() method in each Salesperson subclass
+*/
+
+/**
+* An accessor object to add leads to a sales hierarchy optimally and
+* inspect the total amount of risk currently being taken on.
+*/
 class SalesHierarchy
 {
+	/**
+	* Given the legacy salesperson hierarchy format, this returns
+	* a hierarchy object that matches. See Greed.php for the specification.
+	* @param string - the sales hierarchy
+	* @return SalesHierarchy
+	*/
 	public static function build($sales_hierarchy_string)
 	{
 		// implement me!
-		$root = null;
-		$in_sales_definition = false;
-
-		$in_context_of = [];
-		$add_child = false;
-		$inner = '';
-
-		for ($string_index = 0; $string_index < strlen($sales_hierarchy_string); $string_index++)
-		{
-			$char = substr($sales_hierarchy_string, $string_index, 1);
-
-			if (!$in_sales_definition)
-			{
-				if ($char === '{')
-				{
-					$in_sales_definition = true;
-					continue;
-				}
-				else if (in_array($char, ['0', '1']))
-				{
-					$add_child = $char === '0';
-					continue;
-				}
-			}
-			else
-			{
-				if ($char === '}')
-				{
-					$in_sales_definition = false;
-					$sales = explode('|', $inner);
-					$inner = '';
-					switch($sales[1])
-					{
-						case 'Sociopath':
-						case 'Clueless':
-						case 'Loser':
-							$new_sales_guy = new $sales[1]();
-							break;
-						default:
-							throw new Exception(sprintf("Can't recognize %s", $sales[1]));
-					}
-					if (!$root)
-					{
-						$root = $new_sales_guy;
-					}
-					else if ($in_context_of)
-					{
-						while ($in_context_of)
-						{
-							$current = $in_context_of[count($in_context_of) - 1];
-							if (!$current->left())
-							{
-								$current->set_left($new_sales_guy);
-								$new_sales_guy->set_parent($current);
-								break;
-							}
-							if (!$current->right())
-							{
-								$current->set_right($new_sales_guy);
-								$new_sales_guy->set_parent($current);
-								break;
-							}
-							array_pop($in_context_of);
-						}
-					}
-
-					if ($add_child)
-					{
-						$add_child = false;
-						array_push($in_context_of, $new_sales_guy);
-					}
-
-				}
-				else
-				{
-					$inner = $inner . $char;
-				}
-			}
-		}
-		return new SalesHierarchy($root);
+		throw new BadMethodCallException('implement this method');
 	}
 
+	/**
+	* @var Salesperson - the top sales guy, who runs everyone.
+	*/
 	private $root;
 
+	/**
+	* @param Salesperson 
+	*/
 	public function __construct(Salesperson $root)
 	{
 		$this->root = $root;
 	}
 
+	/**
+	* @param Lead - a sales lead
+	* @return void - the lead should be assigned to one of the Salespeople
+	* in the SalesHierarchy. 
+	*/
 	public function assign_to_best_rep(Lead $lead)
 	{
 		$rep = $this->root->get_best_sales_rep($lead);
 		$rep->set_current_lead($lead);
 	}
 
+	/**
+	* @return float - the total risk incurred by the company given the distribution
+	* of sales leads to salespeople.
+	*/
 	public function total_risk()
 	{
 		return $this->root->total_risk_incurred();
 	}
 }
 
+/**
+* A Salesperson abstract class. Concerete subclasses are below.
+*/
 abstract class Salesperson
 {
 	/**
-	* @var Salesperson
+	* @var Salesperson - the direct manager of this Salesperson
 	*/
 	protected $parent = null;
 
 	/**
-	* @var Salesperson
+	* @var Salesperson - one of the two reports to this Salesperson
 	*/
 	protected $right = null;
 
 	/**
-	* @var Salesperson
+	* @var Salesperson - one of the two reports to this Salesperson
 	*/
 	protected $left = null;
 
 	/**
-	* @var Salesperson
+	* @var Salesperson - the current sales lead this Salesperson is working on
+	* (note: this is a potential deal for the company, not the person's manager)
 	*/
 	private $current_lead = null;
 
@@ -132,7 +89,6 @@ abstract class Salesperson
 	{
 		return $this->parent;
 	}
-
 
 	public function left()
 	{
@@ -173,6 +129,7 @@ abstract class Salesperson
 	protected function can_take_lead(Lead $lead)
 	{
 		// tip: you may want to override this function in one of the subclasses.
+		
 		return true;
 	}
 
@@ -180,29 +137,16 @@ abstract class Salesperson
 	{
 		// implement me!
 
-		if ($this->can_take_lead($lead) && $this->current_lead == null)
-		{
-			if ($winner_so_far == null || ($this->risk($lead) < $winner_so_far->risk($lead)))
-			{
-				$winner_so_far = $this;
-			}
-		}
-
-		if ($this->left)
-		{
-			$winner_so_far = $this->left->get_best_sales_rep($lead, $winner_so_far);
-		}
-		if ($this->right)
-		{
-			$winner_so_far = $this->right->get_best_sales_rep($lead, $winner_so_far);
-		}
-
-		return $winner_so_far;
+		throw new BadMethodCallException('implement this method');
 	}
 
+	/**
+	* Sums the total risk incurred by this sales rep and the reps below.
+	* @return float - the total risk incurred.
+	*/
 	public function total_risk_incurred()
 	{
-		$total = 0;
+		$total = 0.0;
 		if ($this->current_lead)
 		{
 			$total += $this->risk($this->current_lead);
@@ -219,31 +163,12 @@ abstract class Salesperson
 	}
 
 	/**
-	* @return calculates the risk that the company takes on given
-	* the #{success_rate()} of the Salesperson
+	* @return float - the risk that the company takes on given
+	* the success_rate() of the Salesperson
 	*/
 	public function risk(Lead $lead)
 	{
 		return $lead->value() * (1 - $this->success_rate());
-	}
-
-	public function __toString()
-	{
-		return $this->stringer(0);
-	}
-
-	private function stringer($indent_level)
-	{
-		$name = str_repeat('-', $indent_level) . get_class($this) . " (has lead? " .( $this->current_lead ? $this->current_lead->value() : 'no'). ") \n";
-		if ($this->left)
-		{
-			$name .= $this->left->stringer($indent_level + 1);
-		}
-		if ($this->right)
-		{
-			$name .= $this->right->stringer($indent_level + 1);
-		}
-		return $name;
 	}
 }
 
@@ -252,12 +177,7 @@ class Sociopath extends Salesperson
 	public function success_rate()
 	{
 		// implement me!
-		return 0.85;
-	}
-
-	public function can_take_lead(Lead $lead)
-	{
-		return $lead->value() >= 1000000;
+		throw new BadMethodCallException('implement this method');
 	}
 }
 
@@ -269,11 +189,7 @@ class Clueless extends Salesperson
 
 		// tip: use the is_a function
 
-		if (is_a($this->parent, 'Sociopath'))
-		{
-			return 0.65;
-		}
-		return 0.45;
+		throw new BadMethodCallException('implement this method');
 	}
 }
 
@@ -282,15 +198,14 @@ class Loser extends Salesperson
 	public function success_rate()
 	{
 		// implement me!
-
-		if (is_a($this->parent, 'Loser'))
-		{
-			return $this->parent->success_rate() / 2;
-		}
-		return 0.02;
+		throw new BadMethodCallException('implement this method');
 	}
 }
 
+/**
+* An object to represent sales leads (as in, deals that have yet to come in, not
+* a salesperson's manager). Gives the name and $ value of the lead.
+*/
 class Lead
 {
 	private $name;

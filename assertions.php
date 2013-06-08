@@ -1,5 +1,10 @@
 <?php
 
+function task($message)
+{
+	throw new AssertException(sprintf('You may delete this task once you %s', $message));
+}
+
 function fail($message)
 {
 	throw new AssertException($message);

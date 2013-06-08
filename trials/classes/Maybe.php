@@ -18,13 +18,13 @@ class MaybeMonad
 	public function andThen(callable $next_function, array $extra_params=[])
 	{
 		// implement me!
-		return $this;
+		throw new BadMethodCallException('implement this method');
 	}
 	
 	public function resolve()
 	{
 		// implement me!
-		return $this;
+		throw new BadMethodCallException('implement this method');
 	}
 }
 
@@ -79,12 +79,12 @@ class MaybeComprehension
 	public function _maybe_resolve()
 	{
 		// implement me!
-		return $this;
+		throw new BadMethodCallException('implement this method');
 	}
 	
 	public function __call($name, $args)
 	{
 		// implement me!
-		return $this;
+		throw new BadMethodCallException('implement this method');
 	}
 }

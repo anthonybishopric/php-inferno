@@ -134,7 +134,7 @@ class Anger
 
 		assert_that($count_of_furies(['Megaera', 'Tisiphone', 'Allecto']))->is_identical_to(__);
 
-		// uncomment this line and see what happens
+		task('uncomment the following line');
 		// assert_that($count_of_furies("Medusa"));
 	}
 
