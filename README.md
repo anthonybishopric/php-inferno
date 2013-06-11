@@ -15,39 +15,22 @@ _PHP 5.4.9 and higher is required to begin._
 
 ## A set of guided exercises through PHP Hell
 
+**Limbo** -The beginning of your trip introduces you to basic PHP.
 
-### Limbo
+**Lust** - Arrays are PHP's most sensuous sinners.
 
-The beginning of your trip introduces you to basic PHP.
+**Gluttony** - Strings consume, regular expressions take all they can.
 
-### Lust
+**Greed** - Classes want everything for themselves.
 
-Arrays are PHP's most sensuous sinners.
+**Anger** - Callables in PHP can drive you into a rage.
 
-### Gluttony
+**Heresy** - Type Juggling spits in the face of strong types.
 
-Strings consume content, regular expressions take all they can.
+**Violence** - Exceptions and errors in PHP brutally alter programs.
 
-### Greed
+**Fraud** - PHP likes to misrepresent itself as entirely procedural, when that's not the case.
 
-Classes want everything for themselves.
+**Treachery** - The worst sins in the language, reserved for the lowest level of Hell.
 
-### Anger
-
-Callables in PHP can drive you into a rage.
-
-### Heresy
-
-Type Juggling spits in the face of strong types.
-
-### Violence
-
-Exceptions and errors in PHP brutally alter programs.
-
-### Fraud
-
-PHP likes to misrepresent itself as entirely procedural, when that's not the case.
-
-### Treachery
-
-The worst sins in the language, reserved for the lowest level of Hell.
+Most of the circles end with a challenging exercise that will require everything you've learnt up until that point. It is worth noting that some prior programming experience will help you complete some of the more challenging questions.
