@@ -89,6 +89,22 @@ class Greed
 		assert_that($value)->is_identical_to(__);
 	}
 
+	public function __destruct_is_called_when_nobody_references_the_object_anymore()
+	{
+		$called_it = false;
+		
+		$with_destruct = new ClassWithDestructor(function() use (&$called_it)
+		{
+			$called_it = true;
+		});
+		
+		assert_that($called_it)->is_identical_to(__);
+		
+		$with_destruct = null; // no more references to $with_destruct exist
+		
+		assert_that($called_it)->is_identical_to(__);
+	}
+
 	public function __call_lets_an_object_respond_to_any_method_call_that_isnt_defined()
 	{
 		// magic methods in PHP always start with two underscores

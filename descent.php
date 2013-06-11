@@ -36,4 +36,12 @@ $pathway = new Pathway_Through_Darkness([
 	'Treachery'
 ]);
 
-$pathway->descend();
+if ($argc > 1)
+{
+	$exercise = explode(':', $argv[1]);
+	$pathway->descend_match($exercise[0], $exercise[1]);
+}
+else
+{
+	$pathway->descend();
+}

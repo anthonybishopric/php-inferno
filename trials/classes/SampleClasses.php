@@ -78,6 +78,21 @@ class ClassWithConstructor
 	}
 }
 
+class ClassWithDestructor
+{
+	private $callable = null;
+	
+	public function __construct(callable $callable)
+	{
+		$this->callable = $callable;
+	}
+	
+	public function __destruct()
+	{
+		call_user_func($this->callable);
+	}
+}
+
 class MagicClass
 {
 	public function __call($name, $args)

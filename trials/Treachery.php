@@ -272,7 +272,6 @@ class Treachery
 
 	public function eval_lets_you_execute_arbitrary_strings_as_code()
 	{
-
 		$result = eval("return 'wello!';");
 		assert_that($result)->is_identical_to(__);
 
@@ -280,6 +279,24 @@ class Treachery
 		// when user input is considered, as you could give a malicious attacker the ability
 		// to take control of your system. Although there is a disable_functions option in php.ini,
 		// eval cannot be disabled because - like isset() and family - it is not a real function.
+	}
+	
+	/**
+	 * @suppress_warnings
+	 */
+	public function constant_or_classname_confusion()
+	{
+		$the_classname = BasicClass; // automatic cast to string - you will get an E_NOTICE for this
+		$instance = new $the_classname();
+		
+		assert_that(get_class($instance))->is_identical_to(__);
+		
+		define('BasicClass', 'ClassWithProperties');
+		
+		$the_classname = BasicClass; // now uses the constant 'BasicClass'
+		$instance = new $the_classname();
+		
+		assert_that(get_class($instance))->is_identical_to(__);
 	}
 
 	public function phpcredits_shows_the_folks_that_made_the_language()

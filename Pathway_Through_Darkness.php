@@ -4,16 +4,16 @@ require_once 'assertions.php';
 
 class Pathway_Through_Darkness
 {
-	
+
 	private $circles = array();
-	
+
 	public function __construct(array $classes)
 	{
 		foreach ($classes as $class)
 		{
 			require_once "trials/$class.php";
 			$circle = new Circle($class);
-			
+
 			$rfl_class = new ReflectionClass($class);
 			foreach ($rfl_class->getMethods() as $method)
 			{
@@ -25,28 +25,51 @@ class Pathway_Through_Darkness
 			$this->circles[] = $circle;
 		}
 	}
-	
+
+	public function descend_match($circle_pattern, $trial_pattern)
+	{
+		foreach ($this->circles as $circle)
+		{
+			if (strpos($circle->name(), $circle_pattern) !== false)
+			{
+				foreach ($circle->trials() as $trial)
+				{
+					if (strpos($trial->name(), $trial_pattern) !== false)
+					{
+						$this->run_trial($trial);
+					}
+				}
+			}
+		}
+		echo "Thence we came forth to rebehold the stars.\n";
+	}
+
 	public function descend()
 	{
 		foreach ($this->circles as $circle)
 		{
 			foreach ($circle->trials() as $trial)
 			{
-				try
-				{
-					$trial->run();
-				}
-				catch (Exception $e)
-				{
-					$this->print_total();
-					$this->print_message($trial, $e);
-					return;
-				}
+				$this->run_trial($trial);
 			}
 		}
 		echo "Thence we came forth to rebehold the stars.\n";
 	}
-	
+
+	private function run_trial(Trial $trial)
+	{
+		try
+		{
+			$trial->run();
+		}
+		catch (Exception $e)
+		{
+			$this->print_total();
+			$this->print_message($trial, $e);
+			exit(1);
+		}
+	}
+
 	private function build_trial(ReflectionClass $rfl_class, ReflectionMethod $method)
 	{
 		return new Trial(
@@ -55,8 +78,8 @@ class Pathway_Through_Darkness
 					{
 						$instance = $rfl_class->newInstance();
 						$name = $method->name;
-						$this->call_with_aspects($method, function() use ($instance, $name) 
-						{ 
+						$this->call_with_aspects($method, function() use ($instance, $name)
+						{
 							$instance->$name();
 						});
 					}
@@ -75,9 +98,9 @@ class Pathway_Through_Darkness
 		$fn();
 		error_reporting(E_ALL);
 	}
-	
+
 	private function print_total()
-	{	
+	{
 		$total = 0;
 		$completed = 0;
 		foreach ($this->circles as $circle)
@@ -88,7 +111,7 @@ class Pathway_Through_Darkness
 		}
 		echo "\n\033[33m$completed / $total trials conquered\033[0m\n";
 	}
-	
+
 	private function print_message(Trial $trial, Exception $e)
 	{
 		$frame = $e->getTrace()[0];
@@ -103,32 +126,37 @@ class Circle implements Countable
 {
 	private $name = null;
 	private $trials = array();
-	
+
 	public function __construct($name)
 	{
 		$this->name = $name;
 	}
-	
+
+	public function name()
+	{
+		return $this->name;
+	}
+
 	public function add_trial(Trial $trial)
 	{
 		$this->trials[] = $trial;
 	}
-	
+
 	public function trials()
 	{
 		return $this->trials;
 	}
-	
+
 	public function count()
 	{
 		return count($this->trials);
 	}
-	
+
 	public function complete()
 	{
 		return $this->count() == $this->count_of_completed();
 	}
-	
+
 	public function count_of_completed()
 	{
 		$completed = 0;
@@ -138,7 +166,7 @@ class Circle implements Countable
 		}
 		return $completed;
 	}
-	
+
 	public function completion_string()
 	{
 		$str = '';
@@ -159,14 +187,14 @@ class Trial
 		$this->completed = false;
 		$this->failed = false;
 	}
-	
+
 	public function run()
 	{
 		try
 		{
 			$fn = $this->fn;
 			$fn();
-			$this->completed = true;	
+			$this->completed = true;
 		}
 		catch(Exception $e)
 		{
@@ -174,17 +202,17 @@ class Trial
 			throw $e;
 		}
 	}
-	
+
 	public function complete()
 	{
 		return $this->completed;
 	}
-	
+
 	public function name()
 	{
 		return $this->name;
 	}
-	
+
 	public function status_char()
 	{
 		if ($this->completed)
@@ -201,5 +229,6 @@ class Trial
 		}
 	}
 }
+
 
 define('__', 'FILL ME IN');
