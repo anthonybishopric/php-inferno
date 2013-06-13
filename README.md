@@ -1,6 +1,6 @@
 # The PHP Inferno
 
-The PHP inferno is a guided set of exercises through PHP Hell. It is a cautionary tale about the features of PHP and how to use them safely. You will learn of the sins of the language and how to remain pious even in the darkest PHP codebases. 
+The PHP inferno is a guided set of exercises through PHP Hell. It is a cautionary tale about the features of PHP and how to use them safely. You will learn of the sins of the language and how to remain pious even in the darkest PHP codebases. The format is similar to the Ruby Koans, but has more long-form programming exercises, horrifying monsters and literary references. 
 
 _PHP 5.4.9 and higher is required to begin._
 
