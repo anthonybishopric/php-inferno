@@ -133,6 +133,30 @@ class Treachery
 		assert_that($b < $c)->is_identical_to(__);
 		assert_that($c < $a)->is_identical_to(__);
 	}
+	
+	public function octal_numbers_break_string_int_loose_equality()
+	{
+		/* Virgil says: octals are base-8 representation of numbers. 
+		* The number 010 is equal to 8 and
+		* the value 0111 is equal to 73 
+		* (since 0 * 8^3 + 1 * 8^2 + 1 * 8^1 + 1* 8^0).
+		*
+		* In PHP, a leading zero on an int (note: not a string) triggers
+		* the conversion to octal. Beware!
+		*/
+		assert_that(0101)->is_identical_to(__);
+		
+		assert_that('101' == 101)->is_identical_to(__);
+		assert_that('0101' == 0101)->is_identical_to(__);
+	}
+	
+	public function octal_numbers_truncate_after_an_invalid_value_is_given()
+	{
+		// not even a warning...
+		
+		assert_that(0090)->is_identical_to(__);
+		assert_that(0183)->is_identical_to(__);
+	}
 
 	/**
 	* @suppress_warnings
