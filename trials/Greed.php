@@ -345,7 +345,7 @@ class Greed
 	*         /          \
 	*        Williamson   x
 	*
-	* "0{Blake|Sociopath}0{Ricky|Clueless}1{Shelley|Loser}1{Dave|Loser}0{Williamson|Loser}"
+	* "0{Blake|Sociopath}0{Ricky|Clueless}1{Dave|Loser}1{Shelley|Loser}1{Williamson|Loser}"
 	*  
 	*	    Blake
 	*	   /      \
