@@ -316,13 +316,13 @@ class Greed
 	*
 	*  * A 0{Name,Type} means add a node with the name "Name" and type "Type" and
 	*   add a left child edge.
-	*  * A 1{Name,Type} means add a node with the name "Name" and type "Type"
-	*   and pop up to the next node. For example, if you were on a leaf node, you
-	*   would set the value of the left child and then point at the right node. If
-	*   you had set the right node, you pop up to the parent and perform on its right node.
-	*  * You can specify {empty} to indicate an empty position in the tree
+	*  * A 1{Name,Type} means add a node with the name "Name" and type "Type". 
+	*   Then, pop up to the parent node. If there is an empty position to the right, go there. Otherwise,
+	*   keep popping up until the parent node does not have a right child. 
 	*  * If the string ends before the tree is fully flushed out, then the
 	*   the remaining spots are considered empty.
+	*  * If there is more content to the string but the tree is already full, skip the 
+	*   leftover nodes.
 	*
 	* Here are some examples of the trees that get made:
 	*
@@ -330,9 +330,9 @@ class Greed
 	*
 	* makes
 	*
-	*       Blake
+	*	    Blake
 	*	   /    \
-	*  Ricky   Shelley
+	*	Ricky   Shelley
 	*
 	*
 	* "0{Blake|Sociopath}0{Ricky|Clueless}1{Dave|Loser}0{Shelley|Clueless}1{Williamson|Loser}"
@@ -344,6 +344,18 @@ class Greed
 	*    Dave    Shelley
 	*         /          \
 	*        Williamson   x
+	*
+	* "0{Blake|Sociopath}0{Ricky|Clueless}1{Shelley|Loser}1{Dave|Loser}0{Williamson|Loser}"
+	*  
+	*	    Blake
+	*	   /      \
+	*     Ricky    Williamson
+	*     /     \
+	*    Dave    Shelley
+	* 
+	*
+	* (in that last example, note that we had to pop up twice when we finished adding Shelley - Shelley 
+	* popped up to Ricky, there was no empty position to the right and we popped up again to Blake)
 	*
 	* Your job is to interpret the string and create a hierarchy of Salespeople. This hierarchy can
 	* be queried to see who should take on a Lead. Leads have a $ value associated with them. Of course,
