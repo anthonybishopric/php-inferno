@@ -88,6 +88,16 @@ class Greed
 
 		assert_that($value)->is_identical_to(__);
 	}
+	
+	public function methods_with_same_name_as_class_act_as_constructors()
+	{
+		$with_constructor = new ClassWithNameAsConstructor("Fortuna", "Hades");
+		$value = $with_constructor->get_value_string();
+
+		// Virgil says: Beware, classname constructor methods are case insensitive.
+		// A class 'Hades' with a method 'hades()' would call 'hades()' as its constructor.
+		assert_that($value)->is_identical_to(__);
+	}
 
 	public function __destruct_is_called_when_nobody_references_the_object_anymore()
 	{

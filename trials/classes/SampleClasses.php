@@ -78,6 +78,25 @@ class ClassWithConstructor
 	}
 }
 
+class ClassWithNameAsConstructor
+{
+	private $property_one = null;
+	private $property_two = null;
+
+	public function ClassWithNameAsConstructor($property_one, $property_two)
+	{
+		$this->property_one = $property_one;
+		$this->property_two = $property_two;
+	}
+
+	public function get_value_string()
+	{
+		// sprintf formats strings
+		return sprintf("%s and %s", $this->property_one, $this->property_two);
+	}
+	
+}
+
 class ClassWithDestructor
 {
 	private $callable = null;
