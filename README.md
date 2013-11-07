@@ -34,3 +34,7 @@ _PHP 5.4.9 and higher is required to begin._
 **Treachery** - The worst sins in the language, reserved for the lowest level of Hell.
 
 Most of the circles end with a challenging exercise that will require everything you've learnt up until that point. It is worth noting that some prior programming experience will help you complete some of the more challenging questions.
+
+## License
+
+The PHP inferno is licensed under the [Apache 2.0 License](http://www.apache.org/licenses/LICENSE-2.0)
